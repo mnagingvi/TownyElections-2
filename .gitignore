@@ -20,3 +20,6 @@ Thumbs.db
 build-report.md
 build.log
 release-notes.md
+
+# Python
+__pycache__/
