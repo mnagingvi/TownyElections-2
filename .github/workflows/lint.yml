@@ -1,0 +1,52 @@
+name: Lint
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  resources:
+    name: Validate YAML and message keys
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: python -m pip install --disable-pip-version-check pyyaml
+
+      - name: Check config, plugin.yml and every locale
+        run: python scripts/check_messages.py
+
+  workflows:
+    name: Lint the workflows
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: actionlint
+        uses: raven-actions/actionlint@v2
+        with:
+          # Fails the job on any workflow syntax or expression problem.
+          fail-on-error: true
+          # shellcheck and pyflakes are not installed on the runner, so leave
+          # the embedded-script checks to the build job itself.
+          shellcheck: false
+          pyflakes: false
