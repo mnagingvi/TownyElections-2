@@ -293,7 +293,7 @@ def render_comment(kind: str, analysis: dict[str, Any], closing: bool) -> str:
              safe_text(analysis["summary"]), "",
              "### Key changes" if kind == "pr" else "### Key details", ""]
     lines.extend(f"- {safe_text(point)}" for point in analysis["highlights"])
-    lines += ["", "_Automated OpenRouter summary; please verify it against the original._"]
+    lines += ["", "_Automated AI summary; please verify it against the original._"]
     if closing:
         lines += ["", "_Flagged as high-confidence spam. Automated closures are reversible: "
                   "reopen this item or ask a maintainer if this is a mistake. The `spam` label "
