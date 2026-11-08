@@ -1,0 +1,81 @@
+name: Release notes preview
+
+# Writes the release body without publishing anything, so the wording can be
+# checked (and re-rolled) before a tag is pushed. Nothing here creates a release.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to write notes for (default: the version in pom.xml)"
+        required: false
+        type: string
+      model:
+        description: "OpenRouter model (default: openrouter/auto, or the OPENROUTER_MODEL variable)"
+        required: false
+        type: string
+      use_ai:
+        description: "Ask OpenRouter for the summary (uncheck to see the changelog-only fallback)"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    name: Preview release notes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Generate the notes
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL }}
+        run: |
+          args=()
+          if [ -n "${{ inputs.version }}" ]; then
+            args+=(--version "${{ inputs.version }}")
+          fi
+          if [ -n "${{ inputs.model }}" ]; then
+            args+=(--model "${{ inputs.model }}")
+          fi
+          if [ "${{ inputs.use_ai }}" != "true" ]; then
+            args+=(--no-ai)
+          fi
+          python3 scripts/ai_release_notes.py "${args[@]}" --out release-notes.md
+
+      - name: Show the notes in the run summary
+        if: always()
+        run: |
+          if [ -f release-notes.md ]; then
+            {
+              echo "## Preview: release notes"
+              echo
+              cat release-notes.md
+              echo
+              echo "---"
+              echo "_Nothing was published. Push a \`v<version>\` tag to run the Release workflow._"
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No notes were generated - see the step log above." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload the notes
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-notes-preview
+          path: release-notes.md
+          if-no-files-found: warn
