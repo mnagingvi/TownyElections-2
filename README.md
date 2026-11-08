@@ -116,7 +116,7 @@ placeholders listed below.
 ## Building
 
 ```bash
-mvn clean package
+qwertyui
 ```
 
 The shaded jar is produced at `target/TownyElections-version.number.jar`. Drop it into
