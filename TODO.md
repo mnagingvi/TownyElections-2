@@ -17,3 +17,18 @@ These are not guaranteed to be added, these are just ideas which you can use if 
 
 - [ ] election night extras - a pre-close countdown boss bar ("polls close in 10m"),
       a configurable fireworks palette, and an optional results webhook for Discord.
+
+- [ ] Modrinth / Hangar publishing - the Release workflow only attaches the jar to
+      a GitHub release. A publish job for Modrinth (and maybe Hangar) needs API
+      tokens as repository secrets and a version-scoped changelog body.
+
+- [ ] coverage reporting - the unit tests run in CI but nothing measures them; JaCoCo
+      plus a Codecov (or Code Climate) upload would show which counting paths are
+      still untested.
+
+- [ ] integration tests against a Paper runtime - MockBukkit or a headless Paper
+      instance could cover the parts the current tests skip: config loading,
+      message files, command parsing and the Towny hand-off on conclusion.
+
+- [ ] discussion / feature-request triage - a stale-issue workflow would close
+      bug reports that never got a `/election version` reply after a few weeks.
