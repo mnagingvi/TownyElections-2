@@ -126,6 +126,8 @@ public class ElectionMenu implements Listener {
                 "gui.main-party-name", "gui.main-party-lore", menuPlaceholders);
         addAction(inventory, holder, 32, ElectionMenuAction.LEAVE_PARTY, Material.WHITE_BANNER,
                 "gui.main-leave-party-name", "gui.main-leave-party-lore", menuPlaceholders);
+        addAction(inventory, holder, 30, ElectionMenuAction.NIGHT, Material.FIREWORK_ROCKET,
+                "gui.main-night-name", "gui.main-night-lore", menuPlaceholders);
 
         if (player.hasPermission("townyelections.admin")) {
             addAction(inventory, holder, 37, ElectionMenuAction.ADMIN_START, Material.EMERALD_BLOCK,
@@ -324,6 +326,7 @@ public class ElectionMenu implements Listener {
             case CANDIDATES -> openRoster(player, holder.getTownUuid());
             case STANDINGS -> openStandings(player, holder.getTownUuid());
             case RESULTS -> openResults(player, holder.getTownUuid());
+            case NIGHT -> handleNight(player, holder.getTownUuid());
             case RUN -> handleRun(player, holder.getTownUuid());
             case WITHDRAW -> handleWithdraw(player, holder.getTownUuid());
             case SET_CAMPAIGN -> beginTextInput(player, holder.getTownUuid(), PendingInputType.CAMPAIGN);
@@ -535,6 +538,36 @@ public class ElectionMenu implements Listener {
                 "town", ctx.town().getName(),
                 "min", String.valueOf(config.getMinTownResidents())));
         openMain(player);
+    }
+
+    /** Replays the last result as an election night show. */
+    private void handleNight(Player player, UUID townUuid) {
+        if (!player.hasPermission("townyelections.info")) {
+            messages.send(player, "general.no-permission");
+            return;
+        }
+        PlayerContext ctx = resolveContextForTown(player, townUuid);
+        if (ctx == null) {
+            return;
+        }
+        ElectionResult result = elections.getLastResult(ctx.town().getUUID());
+        if (result == null) {
+            messages.send(player, "night.nothing-to-replay");
+            openMain(player);
+            return;
+        }
+        if (plugin.getElectionNight() == null || !plugin.getElectionNight().isEnabled()) {
+            messages.send(player, "night.disabled");
+            return;
+        }
+        player.closeInventory();
+        if (!plugin.getElectionNight().replay(towny.of(ctx.town()), result)) {
+            messages.send(player, "night.already-running",
+                    MessageManager.placeholders("town", ctx.town().getName()));
+            return;
+        }
+        messages.send(player, "night.started",
+                MessageManager.placeholders("town", ctx.town().getName()));
     }
 
     private void handleReload(Player player, UUID townUuid) {

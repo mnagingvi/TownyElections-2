@@ -30,6 +30,9 @@ import java.util.UUID;
  *   <li>%townyelections_leading_party% - leading party in the current town election</li>
  *   <li>%townyelections_last_winner% - name of the last winner in their town</li>
  *   <li>%townyelections_last_winner_party% - party of the last winner in their town</li>
+ *   <li>%townyelections_last_winner_votes% - votes the last winner received</li>
+ *   <li>%townyelections_last_turnout% - turnout of the last election, as a percentage</li>
+ *   <li>%townyelections_night_running% - true/false whether an election night show is live</li>
  * </ul>
  *
  */
@@ -108,6 +111,18 @@ public class ElectionsPlaceholderExpansion extends PlaceholderExpansion {
                         .findFirst()
                         .orElse(plugin.getConfigManager().getDefaultPartyName());
             }
+            case "last_winner_votes":
+                return lastResult == null ? "0" : String.valueOf(lastResult.getWinnerVotes());
+            case "last_turnout": {
+                if (lastResult == null) {
+                    return "0";
+                }
+                int residents = Math.max(1, lastResult.getResidentCount());
+                return String.valueOf(Math.round((lastResult.getTotalVotes() * 100.0) / residents));
+            }
+            case "night_running":
+                return (town != null && plugin.getElectionNight() != null
+                        && plugin.getElectionNight().isRunning(town.getUUID())) ? "true" : "false";
             default:
                 return null;
         }

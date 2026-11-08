@@ -70,6 +70,21 @@ public class ConfigManager {
     private long votingReminderBeforeEndMs;
     private boolean notifyOnJoin;
 
+    // election night
+    private boolean nightEnabled;
+    private int nightMinimumVotes;
+    private boolean nightDeferAnnouncements;
+    private String nightRevealOrder;
+    private int nightStageDelayTicks;
+    private int nightIntroDelayTicks;
+    private int nightWinnerHoldTicks;
+    private boolean nightBossBar;
+    private boolean nightTitles;
+    private boolean nightSounds;
+    private boolean nightFireworks;
+    private int nightFireworkCount;
+    private boolean nightBroadcastServerWide;
+
     public ConfigManager(TownyElections plugin) {
         this.plugin = plugin;
     }
@@ -125,6 +140,21 @@ public class ConfigManager {
         broadcastServerWide = c.getBoolean("notifications.broadcast-server-wide", false);
         votingReminderBeforeEndMs = DurationUtil.parseMillis(c.getString("notifications.voting-reminder-before-end"), hours(6));
         notifyOnJoin = c.getBoolean("notifications.notify-on-join", true);
+
+        nightEnabled = c.getBoolean("election-night.enabled", true);
+        nightMinimumVotes = Math.max(0, c.getInt("election-night.minimum-votes", 1));
+        nightDeferAnnouncements = c.getBoolean("election-night.defer-announcements", true);
+        nightRevealOrder = c.getString("election-night.reveal-order", "WORST_FIRST")
+                .trim().toUpperCase(Locale.ROOT);
+        nightStageDelayTicks = Math.max(1, c.getInt("election-night.stage-delay-ticks", 40));
+        nightIntroDelayTicks = Math.max(0, c.getInt("election-night.intro-delay-ticks", 60));
+        nightWinnerHoldTicks = Math.max(0, c.getInt("election-night.winner-hold-ticks", 100));
+        nightBossBar = c.getBoolean("election-night.boss-bar", true);
+        nightTitles = c.getBoolean("election-night.titles", true);
+        nightSounds = c.getBoolean("election-night.sounds", true);
+        nightFireworks = c.getBoolean("election-night.fireworks", true);
+        nightFireworkCount = Math.max(0, Math.min(24, c.getInt("election-night.firework-count", 6)));
+        nightBroadcastServerWide = c.getBoolean("election-night.broadcast-server-wide", true);
     }
 
     private static long days(long d) {
@@ -183,4 +213,20 @@ public class ConfigManager {
     public boolean isBroadcastServerWide() { return broadcastServerWide; }
     public long getVotingReminderBeforeEndMs() { return votingReminderBeforeEndMs; }
     public boolean isNotifyOnJoin() { return notifyOnJoin; }
+
+    // ---- Election Night -----------------------------------------------------
+
+    public boolean isNightEnabled() { return nightEnabled; }
+    public int getNightMinimumVotes() { return nightMinimumVotes; }
+    public boolean isNightDeferAnnouncements() { return nightDeferAnnouncements; }
+    public String getNightRevealOrder() { return nightRevealOrder; }
+    public int getNightStageDelayTicks() { return nightStageDelayTicks; }
+    public int getNightIntroDelayTicks() { return nightIntroDelayTicks; }
+    public int getNightWinnerHoldTicks() { return nightWinnerHoldTicks; }
+    public boolean isNightBossBar() { return nightBossBar; }
+    public boolean isNightTitles() { return nightTitles; }
+    public boolean isNightSounds() { return nightSounds; }
+    public boolean isNightFireworks() { return nightFireworks; }
+    public int getNightFireworkCount() { return nightFireworkCount; }
+    public boolean isNightBroadcastServerWide() { return nightBroadcastServerWide; }
 }

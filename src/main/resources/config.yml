@@ -205,6 +205,7 @@ commands:
   status: "status"      # view current election status
   candidates: "candidates"  # list candidates
   results: "results"    # view results of the last concluded election
+  night: "night"        # replay the election night reveal (or skip it)
   start: "start"        # (admin) start an election
   stop: "stop"          # (admin) end voting early and tally
   cancel: "cancel"      # (admin) cancel an election with no winner
@@ -224,3 +225,61 @@ notifications:
   # Notify residents when they log in if there is an active election they can
   # participate in.
   notify-on-join: true
+
+# ----------------------------------------------------------------------------
+#  Election Night - the live results reveal
+# ----------------------------------------------------------------------------
+# When an election concludes, TownyElections can turn the tally into a staged
+# "election night" broadcast instead of printing the winner instantly: a title
+# card, candidate-by-candidate reveals (or round-by-round counting for ranked
+# choice), a boss-bar scoreboard, sound cues, and party-coloured fireworks for
+# the winner. Only residents who are online at that moment see the show.
+#
+# Admins can replay the last result with `/election night`, or fast-forward a
+# running show with `/election night skip`.
+election-night:
+  # Master switch for the live reveal. When false, results are announced the
+  # instant voting closes, exactly like older versions did.
+  enabled: true
+
+  # Elections with fewer ballots than this are announced normally (no show).
+  # Set to 0 to always run the show, even for an empty election.
+  minimum-votes: 1
+
+  # If true, the usual instant "election concluded / winner" broadcasts are
+  # withheld and the live show narrates them instead, so nothing spoils the
+  # reveal. Set to false to keep the old announcements *and* run the show.
+  defer-announcements: true
+
+  # Order the candidates are revealed in:
+  #   WORST_FIRST   - fewest votes first, winner last (most suspense)
+  #   BEST_FIRST    - winner first
+  #   RANDOM        - shuffled every show
+  reveal-order: "WORST_FIRST"
+
+  # Ticks (20 = 1 second) between reveal steps.
+  stage-delay-ticks: 40
+
+  # Ticks to wait after the title card before counting starts.
+  intro-delay-ticks: 60
+
+  # Ticks the winner celebration is held before the closing summary.
+  winner-hold-ticks: 100
+
+  # Show a live boss bar across the top of the screen during the show.
+  boss-bar: true
+
+  # Show title/subtitle cards for the intro and the winner.
+  titles: true
+
+  # Play sounds for reveals, eliminations, and the winner.
+  sounds: true
+
+  # Launch fireworks above every viewer when the winner is revealed.
+  fireworks: true
+
+  # Fireworks per viewer (capped at 24).
+  firework-count: 6
+
+  # Also announce the winner to the whole server (not just the town).
+  broadcast-server-wide: true

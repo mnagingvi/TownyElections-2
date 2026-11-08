@@ -4,6 +4,7 @@ enum ElectionMenuAction {
     CANDIDATES,
     STANDINGS,
     RESULTS,
+    NIGHT,
     RUN,
     WITHDRAW,
     SET_CAMPAIGN,

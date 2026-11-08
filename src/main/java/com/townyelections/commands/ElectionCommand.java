@@ -14,6 +14,7 @@ import com.townyelections.model.Election;
 import com.townyelections.model.ElectionPhase;
 import com.townyelections.model.ElectionResult;
 import com.townyelections.model.VotingSystem;
+import com.townyelections.night.ElectionNight;
 import com.townyelections.util.DurationUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -84,6 +85,7 @@ public class ElectionCommand implements CommandExecutor, TabCompleter {
             case CommandConfig.STATUS -> handleStatus(sender, label);
             case CommandConfig.CANDIDATES -> handleCandidates(sender, label);
             case CommandConfig.RESULTS -> handleResults(sender);
+            case CommandConfig.NIGHT -> handleNight(sender, rest);
             case CommandConfig.START -> handleAdmin(sender, rest, CommandConfig.START);
             case CommandConfig.STOP -> handleAdmin(sender, rest, CommandConfig.STOP);
             case CommandConfig.CANCEL -> handleAdmin(sender, rest, CommandConfig.CANCEL);
@@ -578,6 +580,73 @@ public class ElectionCommand implements CommandExecutor, TabCompleter {
                 "percent", String.valueOf(turnout)));
     }
 
+    // ---- Election night ----------------------------------------------------
+
+    /**
+     * {@code /election night} replays the last result as a live reveal show;
+     * {@code /election night skip} (admin) fast-forwards a running show.
+     */
+    private void handleNight(CommandSender sender, String[] rest) {
+        if (!sender.hasPermission("townyelections.info")) {
+            messages.send(sender, "general.no-permission");
+            return;
+        }
+        ElectionNight night = plugin.getElectionNight();
+        if (night == null) {
+            messages.send(sender, "night.disabled");
+            return;
+        }
+
+        if (rest.length > 0 && rest[0].equalsIgnoreCase("skip")) {
+            if (!sender.hasPermission("townyelections.admin")) {
+                messages.send(sender, "general.no-permission");
+                return;
+            }
+            Town target;
+            if (rest.length > 1) {
+                target = towny.getTownByName(rest[1]);
+            } else if (sender instanceof Player player) {
+                target = towny.getPlayerTown(player);
+            } else {
+                target = null;
+            }
+            if (target == null) {
+                messages.send(sender, "admin.town-not-found", MessageManager.placeholders(
+                        "town", rest.length > 1 ? rest[1] : "?"));
+                return;
+            }
+            if (!night.skip(target.getUUID())) {
+                messages.send(sender, "night.not-running",
+                        MessageManager.placeholders("town", target.getName()));
+                return;
+            }
+            messages.send(sender, "night.skipped",
+                    MessageManager.placeholders("town", target.getName()));
+            return;
+        }
+
+        PlayerContext ctx = resolveContext(sender);
+        if (ctx == null) {
+            return;
+        }
+        if (!night.isEnabled()) {
+            messages.send(sender, "night.disabled");
+            return;
+        }
+        ElectionResult result = elections.getLastResult(ctx.town().getUUID());
+        if (result == null) {
+            messages.send(sender, "night.nothing-to-replay");
+            return;
+        }
+        if (!night.replay(towny.of(ctx.town()), result)) {
+            messages.send(sender, "night.already-running",
+                    MessageManager.placeholders("town", ctx.town().getName()));
+            return;
+        }
+        messages.send(sender, "night.started",
+                MessageManager.placeholders("town", ctx.town().getName()));
+    }
+
     // ---- Admin -------------------------------------------------------------
 
     private void handleAdmin(CommandSender sender, String[] rest, String action) {
@@ -644,6 +713,7 @@ public class ElectionCommand implements CommandExecutor, TabCompleter {
                 "status", commands.literal(CommandConfig.STATUS),
                 "candidates", commands.literal(CommandConfig.CANDIDATES),
                 "results", commands.literal(CommandConfig.RESULTS),
+                "night", commands.literal(CommandConfig.NIGHT),
                 "start", commands.literal(CommandConfig.START),
                 "stop", commands.literal(CommandConfig.STOP),
                 "cancel", commands.literal(CommandConfig.CANCEL),
@@ -659,6 +729,7 @@ public class ElectionCommand implements CommandExecutor, TabCompleter {
         messages.sendNoPrefix(sender, "help.status", base);
         messages.sendNoPrefix(sender, "help.candidates", base);
         messages.sendNoPrefix(sender, "help.results", base);
+        messages.sendNoPrefix(sender, "help.night", base);
         if (sender.hasPermission("townyelections.admin")) {
             messages.sendNoPrefix(sender, "help.start", base);
             messages.sendNoPrefix(sender, "help.stop", base);
@@ -723,6 +794,12 @@ public class ElectionCommand implements CommandExecutor, TabCompleter {
                         }
                     }
                 }
+            }
+            // Offer the admin fast-forward switch for election night.
+            if (CommandConfig.NIGHT.equals(action) && args.length == 2
+                    && sender.hasPermission("townyelections.admin")
+                    && "skip".startsWith(partial)) {
+                out.add("skip");
             }
             // Suggest town names for admin commands.
             if (args.length == 2 && isAdminAction(action) && sender.hasPermission("townyelections.admin")) {

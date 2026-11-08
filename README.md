@@ -35,6 +35,11 @@ Towny town ranks (plot management, etc.) and/or mayorship you configure.
 - **Political parties** — candidates can organize under configurable party labels,
   voters can inspect party standings with `/election parties`, and results include
   party-level vote totals alongside individual winners.
+- **Election Night** — a configurable live results reveal: a title card, a boss-bar
+  scoreboard, candidate-by-candidate reveals (or round-by-round ranked-choice
+  counting), sound cues, and party-coloured fireworks for the winner. Instantly
+  announcements can be deferred so nothing spoils the show, and the last result
+  can be replayed with `/election night`.
 - **Inventory GUI** — players can run `/election` with no arguments to open a
   click-driven election desk, inspect candidates, and vote from player-head icons.
 - **Voting** — one command to cast (and optionally change) a vote, with eligibility
@@ -133,6 +138,8 @@ literal below is **configurable** in `config.yml` under the `commands:` section.
 | `/election status`              | `townyelections.info`     | View the current election.           |
 | `/election candidates`          | `townyelections.info`     | List candidates, parties & campaigns. |
 | `/election results`             | `townyelections.info`     | View the last concluded results.     |
+| `/election night`               | `townyelections.info`     | Replay the last result as an Election Night show. |
+| `/election night skip [town]`   | `townyelections.admin`    | Fast-forward a running show.         |
 | `/election start [town]`        | `townyelections.admin`    | Start an election.                   |
 | `/election stop [town]`         | `townyelections.admin`    | End voting early and tally.          |
 | `/election cancel [town]`       | `townyelections.admin`    | Cancel with no winner.               |
@@ -191,6 +198,54 @@ checks, self-vote setting, vote-change setting, campaign limits, and party limit
 as the chat commands. Menu clicks and drags are cancelled inside plugin
 inventories so players cannot take, place, shift-click, or drag GUI items into
 their own inventory.
+
+### Election Night
+
+When an election concludes, TownyElections can present the tally as a staged
+**results broadcast** rather than printing the winner instantly. Only residents
+who are online at that moment see the show:
+
+1. a title card announces the election and its turnout,
+2. candidates are revealed one at a time from the bottom of the field up — each
+   step prints a party-coloured bar chart and updates a boss-bar scoreboard,
+3. for `RANKED_CHOICE` elections the *counting rounds* are replayed instead:
+   every round's tallies, the candidate(s) eliminated, and the exhausted ballots,
+4. the winner is crowned with a title, a server-wide announcement (optional),
+   sound cues, and fireworks above every viewer in the winner's party colours,
+5. a closing summary reports the final turnout and any ranks/mayor status the
+   winner received.
+
+The reveal is purely presentational: the result is recorded and the winner's
+rewards are granted before the first stage runs, so skipping or replaying a show
+can never change the outcome. With `defer-announcements: true` (the default) the
+usual instant "winner" broadcasts are withheld while the show is running, so
+nothing gives the result away early.
+
+```yaml
+election-night:
+  enabled: true
+  minimum-votes: 1            # smaller elections are announced normally
+  defer-announcements: true   # let the show narrate the result
+  reveal-order: "WORST_FIRST" # WORST_FIRST | BEST_FIRST | RANDOM
+  stage-delay-ticks: 40       # 20 ticks = 1 second
+  intro-delay-ticks: 60
+  winner-hold-ticks: 100
+  boss-bar: true
+  titles: true
+  sounds: true
+  fireworks: true
+  firework-count: 6
+  broadcast-server-wide: true
+```
+
+Command and GUI access:
+
+- `/election night` replays the last recorded result for your town (also
+  available as a firework button on the election desk).
+- `/election night skip [town]` (admin) fast-forwards a running show, which is
+  handy on a busy server or when testing.
+- Turning `election-night.enabled` off restores the classic instant
+  announcements.
 
 ### Political parties
 
@@ -376,6 +431,9 @@ If PlaceholderAPI is installed, these placeholders are available (identifier
 | `%townyelections_leading_party%`    | Leading current-election party.       |
 | `%townyelections_last_winner%`      | Name of the last winner in the town. |
 | `%townyelections_last_winner_party%`| Party of the last winner in the town. |
+| `%townyelections_last_winner_votes%`| Votes received by the last winner.   |
+| `%townyelections_last_turnout%`     | Turnout of the last election, in percent. |
+| `%townyelections_night_running%`    | `true` while a night show is live.   |
 
 Every placeholder also has a `nation_` variant (for example
 `%townyelections_nation_phase%` or `%townyelections_nation_last_winner%`) that

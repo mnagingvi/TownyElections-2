@@ -9,6 +9,7 @@ import com.townyelections.manager.CommandConfig;
 import com.townyelections.manager.ConfigManager;
 import com.townyelections.manager.ElectionManager;
 import com.townyelections.manager.MessageManager;
+import com.townyelections.night.ElectionNight;
 import com.townyelections.update.UpdateChecker;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ public class TownyElections extends JavaPlugin {
     private TownyHook townyHook;
     private ElectionManager electionManager;
     private ElectionMenu electionMenu;
+    private ElectionNight electionNight;
     private UpdateChecker updateChecker;
 
     private BukkitTask tickTask;
@@ -57,6 +59,9 @@ public class TownyElections extends JavaPlugin {
 
         // Towny bridge.
         townyHook = new TownyHook(this);
+
+        // Election Night reveal show (needs config + messages, drives itself).
+        electionNight = new ElectionNight(this);
 
         // Core manager and persisted state.
         electionManager = new ElectionManager(this);
@@ -109,6 +114,9 @@ public class TownyElections extends JavaPlugin {
     public void onDisable() {
         if (tickTask != null) {
             tickTask.cancel();
+        }
+        if (electionNight != null) {
+            electionNight.shutdown();
         }
         if (electionManager != null) {
             electionManager.save();
@@ -172,6 +180,10 @@ public class TownyElections extends JavaPlugin {
 
     public ElectionMenu getElectionMenu() {
         return electionMenu;
+    }
+
+    public ElectionNight getElectionNight() {
+        return electionNight;
     }
 
     public UpdateChecker getUpdateChecker() {
