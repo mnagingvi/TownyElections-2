@@ -131,13 +131,19 @@ class SafetyTests(unittest.TestCase):
             self.assertFalse(ai.should_close(item(), "issue", result, self.context, True))
         self.assertFalse(ai.should_close(item(), "issue", self.spam, self.context, False))
 
-    def test_protected_authors_and_labels_never_close(self):
-        for association in ("OWNER", "MEMBER", "COLLABORATOR"):
-            self.assertFalse(ai.should_close(item(author_association=association), "issue", self.spam, self.context, True))
+    def test_protected_labels_and_states_never_close(self):
         for label in ("security", "pinned", "spam", "SPAM"):
             self.assertFalse(ai.should_close(item(labels=[{"name": label}]), "issue", self.spam, self.context, True))
         self.assertFalse(ai.should_close(item(user={"type": "Bot"}), "issue", self.spam, self.context, True))
         self.assertFalse(ai.should_close(item(), "pr", self.spam, self.context, True, pull(draft=True)))
+
+    def test_maintainer_spam_can_close_for_issues_and_prs(self):
+        for association in ("OWNER", "MEMBER", "COLLABORATOR"):
+            with self.subTest(association=association):
+                self.assertTrue(ai.should_close(item(author_association=association), "issue",
+                                                self.spam, self.context, True))
+                self.assertTrue(ai.should_close(item(author_association=association), "pr",
+                                                self.spam, self.context, True, pull()))
 
     def test_closed_bot_draft_and_security_items_skip_provider_entirely(self):
         for change in ({"state": "closed"}, {"user": {"type": "Bot"}}, {"labels": [{"name": "security"}]}):
@@ -240,11 +246,22 @@ class WorkflowScriptTests(unittest.TestCase):
         self.assertIn("HTTP 429", stderr.getvalue())
         self.assertEqual(client.writes(), [])
 
-    def test_maintainer_gets_summary_but_not_spam_closure(self):
+    def test_owner_spam_issue_is_labelled_and_closed(self):
         client = FakeClient(issue=item(author_association="OWNER"))
         message, _ = self.run_with(client, analysis("spam", 1, "wrong candidate received mayorship"))
-        self.assertIn("no automatic closure", message)
-        self.assertEqual([c[1] for c in client.writes()], ["/issues/7/comments"])
+        self.assertIn("closed high-confidence spam", message)
+        self.assertEqual([(c[0], c[1]) for c in client.writes()], [
+            ("POST", "/issues/7/comments"), ("POST", "/issues/7/labels"), ("PATCH", "/issues/7"),
+        ])
+
+    def test_owner_spam_pr_is_labelled_and_closed_without_merge(self):
+        client = FakeClient(issue=item(author_association="OWNER", pull_request={}), pr=pull())
+        message, _ = self.run_with(client, analysis("spam", 1, "wrong candidate received mayorship"))
+        self.assertIn("closed high-confidence spam", message)
+        self.assertEqual([(c[0], c[1]) for c in client.writes()], [
+            ("POST", "/issues/7/comments"), ("POST", "/issues/7/labels"), ("PATCH", "/pulls/7"),
+        ])
+        self.assertEqual(client.writes()[-1][2], {"state": "closed"})
 
     def test_disable_variable_keeps_summaries_but_prevents_closure(self):
         client = FakeClient()
@@ -281,7 +298,7 @@ class WorkflowScriptTests(unittest.TestCase):
 
     def test_closed_or_newly_exempt_item_is_not_written_after_provider_call(self):
         for change in ({"state": "closed"}, {"labels": [{"name": "security"}]},
-                       {"labels": [{"name": "pinned"}]}, {"author_association": "MEMBER"}):
+                       {"labels": [{"name": "pinned"}]}):
             with self.subTest(change=change):
                 client = FakeClient()
                 def provider(*args, change=change, client=client):
