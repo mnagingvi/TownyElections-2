@@ -55,10 +55,14 @@ public class MessageManager {
             defStream = plugin.getResource("messages_en.yml");
         }
         if (defStream != null) {
-            YamlConfiguration def = YamlConfiguration.loadConfiguration(
-                    new InputStreamReader(defStream, StandardCharsets.UTF_8));
-            messages.setDefaults(def);
-            messages.options().copyDefaults(true);
+            try (InputStream in = defStream;
+                 InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+                YamlConfiguration def = YamlConfiguration.loadConfiguration(reader);
+                messages.setDefaults(def);
+                messages.options().copyDefaults(true);
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Failed to load default message resource.", e);
+            }
         }
 
         prefix = messages.getString("prefix", "");
