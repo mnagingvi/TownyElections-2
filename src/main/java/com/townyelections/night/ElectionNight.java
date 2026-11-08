@@ -186,7 +186,7 @@ public final class ElectionNight {
             if (resident == null) {
                 continue;
             }
-            Player online = Bukkit.getPlayer(resident.getUuid());
+            Player online = Bukkit.getPlayer(resident.getUUID());
             if (online != null && seen.add(online.getUniqueId())) {
                 players.add(online);
             }
