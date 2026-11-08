@@ -5,6 +5,51 @@ Notable changes to **TownyElections-2** are recorded here. The format follows
 semantic versioning. Older releases are listed on the
 [releases page](https://github.com/mnagingvi/TownyElections-2/releases).
 
+## [2.0.0] — unreleased
+
+The repository release: 2.0.0 puts the plugin version in line with the
+**TownyElections-2** name and turns the repo around it into something that can
+take contributions. Nothing about elections, config or permissions changed -
+`config-version` stays at **2** and existing installs need no migration.
+
+### Added
+
+- **Unit tests** for the logic that is pure Java: the instant-runoff counter,
+  ballot handling and tallies, duration parsing and colour codes. `mvn package`
+  runs them, CI uploads the Surefire reports.
+- A **build report** on every workflow run and as a sticky comment on pull
+  requests: version, jar size and a per-class test table.
+- A **Lint** workflow running `scripts/check_messages.py` (locale parity,
+  `{placeholders}`, message keys used from Java, `config.yml`/`plugin.yml`
+  sanity) plus actionlint over `.github/workflows`.
+- **CodeQL** security-and-quality scanning on pull requests, on `main` and
+  weekly, and **Dependabot** for Maven and GitHub Actions updates.
+- Repository automation: a managed label set with path-based pull-request
+  labelling, a welcome comment for first-time contributors, and a stale bot for
+  quiet issues and pull requests.
+- **AI-written release notes**: `scripts/ai_release_notes.py` summarises the
+  commits since the previous tag through OpenRouter, and a manual
+  *Release notes preview* workflow lets the wording be checked before a tag.
+- `SECURITY.md`, `CODE_OF_CONDUCT.md`, a pull request template, `RELEASING.md`,
+  and a table in `CONTRIBUTING.md` describing what each workflow checks.
+
+### Fixed
+
+- `plugin.yml` declared `townyelections.player` one indentation level too deep,
+  which turned it into a stray key inside the `townyelections.*` permission
+  instead of a permission of its own.
+- `messages_es.yml` still carried the profile and nation keys removed in 1.3.0,
+  plus a dead `{profile}` placeholder on nine strings.
+- `gui.stale-menu-closed` was missing from the German, Spanish, French and
+  Brazilian Portuguese files, so those locales fell back to English.
+
+### Changed
+
+- Pushing a `v*` tag refuses to publish when the tag disagrees with the
+  `<version>` in `pom.xml`, and now attaches the generated notes and the jar.
+- Workflows run on `checkout@v7`, `setup-java@v6`, `upload-artifact@v7`,
+  `action-gh-release@v3` and `ubuntu-24.04`.
+
 ## [1.3.0] — 2026-11-08
 
 ### Added
