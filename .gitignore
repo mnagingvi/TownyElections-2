@@ -19,3 +19,4 @@ Thumbs.db
 # Build outputs from scripts/build_summary.py
 build-report.md
 build.log
+release-notes.md
