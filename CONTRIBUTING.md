@@ -114,6 +114,7 @@ the difference between a green PR and a round trip:
 | **CodeQL** | PRs and pushes to `main`, weekly | security-and-quality analysis of the Java sources |
 | **Labeler** | PR opened or updated | labels the PR by the paths it touches (`counting`, `translations`, `election-night`, ...) |
 | **Welcome** | first issue or PR by a new contributor | a comment with what a good report or PR needs here |
+| **AI issue and PR summaries** | issue/PR opened, edited, reopened, or PR updated | posts one OpenRouter summary comment and updates it on changes; closes only high-confidence, evidenced spam |
 | **Stale** | daily | marks quiet issues and PRs stale after 45/30 days, closes them 14/10 days later, and skips anything labelled `security` |
 | **Release** | `v*` tag | refuses to publish when the tag disagrees with the `<version>` in `pom.xml`, otherwise builds the jar, writes the release notes through OpenRouter and attaches both to the release |
 | **Release notes preview** | manual | writes the same notes without publishing anything, so the wording can be checked first - see [RELEASING.md](RELEASING.md) |
@@ -123,12 +124,45 @@ Run the lint check locally before pushing:
 ```bash
 python scripts/check_messages.py          # needs PyYAML
 python scripts/build_summary.py           # preview the CI build report
+python -m unittest discover -s tests -p 'test_*.py' -v  # AI summary tests; standard library only
 ```
 
-Two of these only work once they are on `main`, because GitHub reads
-`issues`, `pull_request_target` and scheduled workflows from the default
-branch: **Labeler**, **Welcome** and **Stale**. Everything else runs from the
-branch you are on.
+The event-driven workflows only work once they are on `main`, because GitHub
+reads `issues`, `pull_request_target` and scheduled workflows from the default
+branch: **AI issue and PR summaries**, **Labeler**, **Welcome** and **Stale**.
+Everything else runs from the branch you are on.
+
+### AI issue and PR summaries
+
+`.github/workflows/ai-summary.yml` uses the same `OPENROUTER_API_KEY` repository
+secret and optional `OPENROUTER_MODEL` variable as the release notes; see
+[RELEASING.md](RELEASING.md#one-time-setup-the-openrouter-key) for setup. No extra
+secret is needed. Without the key, or if OpenRouter fails, it skips the summary
+without changing the issue or PR.
+
+- It posts one identified bot comment and edits that comment on later changes.
+  PR summaries use the title, body, and a bounded excerpt of changed files and
+  patches; issue summaries use the title and body. This public text is sent to
+  OpenRouter. Existing comments and API credentials are not sent.
+- Automatic closure requires a spam classification with at least 98% confidence
+  and a matching quote from the submission. Missing details, non-English text,
+  criticism, or an unclear report alone are not spam. Issues close as
+  **not planned**; PRs close without merging. A `spam` label is applied first.
+- Maintainer-authored items can be summarized but never automatically closed.
+  Bots, draft PRs, closed items, and `security`-labelled items are skipped.
+  `pinned` items are never automatically closed. Reopening an item already
+  labelled `spam` will not trigger another automatic closure.
+- To keep summaries but disable all automatic closures, set the repository
+  **variable** `AI_SUMMARY_CLOSE_SPAM` to `false` under **Settings → Secrets and
+  variables → Actions → Variables**. Closure is enabled when it is unset.
+- After the workflow is on `main`, **Actions → AI issue and PR summaries → Run
+  workflow** can summarize an existing issue or PR by number.
+
+For fork PRs, the workflow executes only the trusted base-branch script and
+reads contributor content through GitHub's API; it never checks out or runs the
+PR's code. AI summaries can be wrong and spam detection is best-effort. Reopen a
+mistakenly closed item and remove the `spam` label if appropriate, or disable
+automatic closure while reviewing the model's behavior.
 
 Labels live in `.github/labels.yml` and are synced by the **Labels** workflow;
 add a new label there rather than in the GitHub UI so the next sync does not

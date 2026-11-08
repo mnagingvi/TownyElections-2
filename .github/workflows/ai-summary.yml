@@ -1,0 +1,63 @@
+name: AI issue and PR summaries
+
+on:
+  issues:
+    types: [ opened, edited, reopened ]
+  # The target event grants write access for fork PRs. Only the trusted base
+  # checkout below is executed; contributor code is read as API data, never run.
+  pull_request_target:
+    types: [ opened, edited, reopened, ready_for_review, synchronize ]
+  workflow_dispatch:
+    inputs:
+      number:
+        description: "Issue or PR number to summarize (updates the existing bot comment)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-summary-${{ github.event.issue.number || github.event.pull_request.number || inputs.number }}
+  cancel-in-progress: true
+
+jobs:
+  summarize:
+    name: Summarize and check for spam
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      # Never replace this with the PR head SHA or ref. pull_request_target has
+      # secrets and write permissions, so executing head code would be unsafe.
+      - name: Check out trusted automation only
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Summarize the issue or pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Same repository secret and optional model variable as Release.
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL }}
+          # Defaults to true. Set this repository variable to false to keep
+          # summaries but disable every automatic spam closure.
+          AI_SUMMARY_CLOSE_SPAM: ${{ vars.AI_SUMMARY_CLOSE_SPAM }}
+          NUMBER: ${{ inputs.number }}
+        run: |
+          args=()
+          if [ -n "$NUMBER" ]; then
+            args+=(--number "$NUMBER")
+          fi
+          python3 scripts/ai_summary.py "${args[@]}"

@@ -56,3 +56,7 @@
 - name: needs-info
   color: "fbca04"
   description: Waiting on more details from the reporter
+
+- name: spam
+  color: "d73a4a"
+  description: Clear spam closed by AI triage; reopen if this was a mistake

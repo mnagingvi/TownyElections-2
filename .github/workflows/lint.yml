@@ -33,6 +33,9 @@ jobs:
       - name: Check config, plugin.yml and every locale
         run: python scripts/check_messages.py
 
+      - name: Test the AI summary and spam safeguards
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+
   workflows:
     name: Lint the workflows
     runs-on: ubuntu-24.04
