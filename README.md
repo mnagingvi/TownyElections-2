@@ -7,7 +7,7 @@
 [![Contributors](https://img.shields.io/github/contributors/vingaming1113/TownyElections?label=contributors&logo=github)](https://github.com/vingaming1113/TownyElections/graphs/contributors)
 [![Last commit](https://img.shields.io/github/last-commit/vingaming1113/TownyElections?logo=git)](https://github.com/vingaming1113/TownyElections/commits/main)
 [![Issues](https://img.shields.io/github/issues/vingaming1113/TownyElections?logo=github)](https://github.com/vingaming1113/TownyElections/issues)
-[![bStats servers](https://img.shields.io/bstats/servers/32328?label=servers&logo=googleanalytics&logoColor=white)](https://bstats.org/plugin/bukkit/TownyElection/32328)
+[![bStats servers](https://img.shields.io/bstats/servers/35211?label=servers&logo=googleanalytics&logoColor=white)](https://bstats.org/plugin/bukkit/TownyElection/35211)
 [![Java 21](https://img.shields.io/badge/Java-21-f89820?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![Paper 1.21.4+](https://img.shields.io/badge/Paper-1.21.4%2B-34d399)](https://papermc.io/)
 [![Towny](https://img.shields.io/badge/Towny-required-8b5cf6)](https://github.com/TownyAdvanced/Towny)
@@ -22,7 +22,7 @@ Towny town ranks (plot management, etc.) and/or mayorship you configure.
 
 **Links:** [Releases](https://github.com/vingaming1113/TownyElections/releases)
 | [Issues](https://github.com/vingaming1113/TownyElections/issues)
-| [bStats](https://bstats.org/plugin/bukkit/TownyElection/32328)
+| [bStats](https://bstats.org/plugin/bukkit/TownyElection/35211)
 | [Towny](https://github.com/TownyAdvanced/Towny)
 
 ---

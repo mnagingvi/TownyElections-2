@@ -25,7 +25,8 @@ import org.bukkit.scheduler.BukkitTask;
  */
 public class TownyElections extends JavaPlugin {
 
-    private static final int BSTATS_PLUGIN_ID = 32328; // placeholder id
+    /** bStats plugin id for TownyElections-2 (https://bstats.org/plugin/bukkit/TownyElection/35211). */
+    private static final int BSTATS_PLUGIN_ID = 35211;
 
     private ConfigManager configManager;
     private CommandConfig commandConfig;
