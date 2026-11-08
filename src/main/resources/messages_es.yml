@@ -9,7 +9,6 @@ general:
   players-only: "&cEste comando solo puede ser usado por jugadores."
   not-a-resident: "&cNo eres un residente de Towny registrado."
   no-town: "&cDebes pertenecer a un pueblo para hacer eso."
-  no-nation: "&cDebes pertenecer a una nación para hacer eso."
   reloaded: "&aConfiguración recargada correctamente."
   unknown-command: "&cSubcomando desconocido. Usa &f/{label} {help}&c."
   invalid-number: "&cEse no es un número válido."
@@ -33,9 +32,6 @@ election:
   system-ranked-choice: "&fVoto preferencial"
   system-approval: "&fAprobación"
 
-nation:
-  disabled: "&cLas elecciones nacionales están desactivadas en este servidor."
-
 update:
   available: "&fHay una nueva versión disponible: &av{latest}&f (tienes &7v{current}&f). Descargar: &b{url}"
 
@@ -54,7 +50,6 @@ candidate:
   recommend-campaign: "&8 • &fEstablece un mensaje de campaña: &7/{label} {campaign} <mensaje>"
   recommend-party: "&8 • &fÚnete o crea un partido: &7/{label} {party} <nombre>"
   recommend-color: "&8 • &fDa color a tu partido: &7/{label} {party} color <color>"
-  recommend-profile: "&8 • &fEscribe un perfil de candidato: &7/{label} {profile} <texto>"
 
 campaign:
   set: "&aTu mensaje de campaña ha sido establecido."
@@ -63,16 +58,6 @@ campaign:
   empty: "&cUso: &f/{label} {campaign} <mensaje>"
   header: "&8&m----&r &bCampaña: &f{candidate} &8&m----"
   body: "&7{message}"
-
-profile:
-  set: "&aTu perfil de candidato ha sido establecido."
-  too-long: "&cTu perfil de candidato es demasiado largo (máximo &e{max}&c caracteres)."
-  blocked: "&cTu perfil de candidato contiene contenido no permitido."
-  empty: "&cUso: &f/{label} {profile} <perfil>"
-  none: "&8(sin perfil establecido)"
-  header: "&8&m----&r &bPerfil: &f{candidate} &8&m----"
-  body: "&7{profile}"
-  usage: "&7Establécelo con &f/{label} {profile} <perfil>&7."
 
 party:
   set: "&aTu partido político se ha establecido como &f{party}&a."
@@ -171,10 +156,6 @@ gui:
   main-campaign-lore:
     - "&7Actual: &f{your_campaign}"
     - "&7Haz clic y escribe el nuevo mensaje en el chat."
-  main-profile-name: "&dEstablecer perfil de candidato"
-  main-profile-lore:
-    - "&7Actual: &f{your_profile}"
-    - "&7Haz clic y escribe tu perfil en el chat."
   main-party-name: "&9Establecer partido"
   main-party-lore:
     - "&7Actual: &f{your_party}"
@@ -213,38 +194,31 @@ gui:
   candidate-name: "&f{candidate} &8[&b{party}&8]"
   candidate-lore-secret:
     - "&7Campaña: &f{message}"
-    - "&7Perfil: &f{profile}"
     - "&7Los totales de votos en vivo están ocultos."
     - "&aHaz clic para votar por {candidate}."
   candidate-lore-public:
     - "&7Campaña: &f{message}"
-    - "&7Perfil: &f{profile}"
     - "&7Votos: &f{candidate_votes}"
     - "&aHaz clic para votar por {candidate}."
   candidate-lore-closed:
     - "&7Campaña: &f{message}"
-    - "&7Perfil: &f{profile}"
     - "&7La votación no está abierta ahora."
   candidate-lore-ranked:
     - "&7Campaña: &f{message}"
-    - "&7Perfil: &f{profile}"
     - "&aEn tu papeleta como preferencia &e#{your_rank}&a."
     - "&7Tu papeleta: &f{your_vote}"
     - "&cHaz clic para quitarlo de tu papeleta."
   candidate-lore-unranked:
     - "&7Campaña: &f{message}"
-    - "&7Perfil: &f{profile}"
     - "&7Tu papeleta: &f{your_vote}"
     - "&aHaz clic para clasificar a {candidate} como tu siguiente preferencia."
   candidate-lore-approved:
     - "&7Campaña: &f{message}"
-    - "&7Perfil: &f{profile}"
     - "&aHas aprobado a {candidate}."
     - "&7Tu papeleta: &f{your_vote}"
     - "&cHaz clic para retirar tu aprobación."
   candidate-lore-unapproved:
     - "&7Campaña: &f{message}"
-    - "&7Perfil: &f{profile}"
     - "&7Tu papeleta: &f{your_vote}"
     - "&aHaz clic para aprobar a {candidate}."
   party-entry-name: "&b{party}"
@@ -272,9 +246,9 @@ gui:
     - "&7Partido: &f{party}"
     - "&7Votos: &f{candidate_votes} &8(&7{percent}%&8)"
   campaign-prompt: "&eEscribe tu nuevo mensaje de campaña en el chat &7(máx. {max_campaign} caracteres)&e, o escribe &fcancel&e."
-  profile-prompt: "&eEscribe tu perfil de candidato en el chat &7(máx. {max_profile} caracteres)&e, o escribe &fcancel&e."
   party-prompt: "&eEscribe el nombre de tu partido en el chat &7(máx. {max_party} caracteres)&e, o escribe &fcancel&e."
   input-cancelled: "&7Entrada de texto del menú cancelada."
+  stale-menu-closed: "&7El menú de elecciones se cerró porque el plugin se actualizó. Vuelve a abrirlo con &f/{label}&7."
 
 results:
   header: "&8&m-----&r &bResultados electorales &8- &f{town} &8&m-----"
@@ -309,8 +283,8 @@ status:
   your-ballot: "&7Tu papeleta: &f{ballot}"
   your-vote-none: "&7Tu voto: &8(ninguno)"
   candidate-list-header: "&7Candidatos (usa &f/{label} {vote} <nombre>&7):"
-  candidate-entry: "&8 - &f{candidate} &8[{party}] &8(&e{votes} votos&8) &7{message} &8| &7{profile}"
-  candidate-entry-hidden: "&8 - &f{candidate} &8[{party}] &7{message} &8| &7{profile}"
+  candidate-entry: "&8 - &f{candidate} &8[{party}] &8(&e{votes} votos&8) &7{message}"
+  candidate-entry-hidden: "&8 - &f{candidate} &8[{party}] &7{message}"
 
 admin:
   started: "&aHas iniciado una elección en &f{town}&a."
@@ -318,14 +292,12 @@ admin:
   cancelled: "&aHas cancelado la elección en &f{town}&a."
   no-active-to-stop: "&cNo hay ninguna elección activa que finalizar en &f{town}&c."
   town-not-found: "&cNo se encontró ningún pueblo llamado &f{town}&c."
-  nation-not-found: "&cNo se encontró ninguna nación llamada &f{nation}&c."
 
 help:
   header: "&8&m-----&r &bAyuda de TownyElections &8&m-----"
   run: "&f/{label} {run} &8- &7Preséntate como candidato."
   withdraw: "&f/{label} {withdraw} &8- &7Retírate de la carrera."
   campaign: "&f/{label} {campaign} <mensaje> &8- &7Establece tu mensaje de campaña."
-  profile: "&f/{label} {profile} <perfil> &8- &7Establece tu perfil de candidato."
   party: "&f/{label} {party} <nombre> &8- &7Únete a un partido político o créalo."
   party-color: "&f/{label} {party} color <color> &8- &7Establece el color de tu partido."
   parties: "&f/{label} {parties} &8- &7Muestra los partidos y sus posiciones actuales."
@@ -333,7 +305,6 @@ help:
   status: "&f/{label} {status} &8- &7Consulta la elección actual."
   candidates: "&f/{label} {candidates} &8- &7Muestra los candidatos."
   results: "&f/{label} {results} &8- &7Consulta los últimos resultados."
-  nation: "&f/{label} {nation} <subcomando> &8- &7Ejecuta cualquier comando para tu nación (por ejemplo, {nation} {vote})."
   night: "&f/{label} {night} &8- &7Reproduce la noche electoral (admins: {night} skip)."
   start: "&f/{label} {start} [town] &8- &7(Admin) Inicia una elección."
   stop: "&f/{label} {stop} [town] &8- &7(Admin) Finaliza la votación y cuenta los resultados."

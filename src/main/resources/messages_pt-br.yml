@@ -247,6 +247,7 @@ gui:
   campaign-prompt: "&eDigite sua nova mensagem de campanha no chat &7(máx. {max_campaign} caracteres)&e ou digite &fcancel&e."
   party-prompt: "&eDigite o nome do seu partido no chat &7(máx. {max_party} caracteres)&e ou digite &fcancel&e."
   input-cancelled: "&7Entrada de texto do menu cancelada."
+  stale-menu-closed: "&7O menu de eleições foi fechado porque o plugin foi atualizado. Abra-o novamente com &f/{label}&7."
 
 results:
   header: "&8&m-----&r &bResultados da Eleição &8- &f{town} &8&m-----"
