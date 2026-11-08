@@ -18,7 +18,8 @@ jar attached.
 
 The release notes are written by an LLM through
 [OpenRouter](https://openrouter.ai). The workflow reads it from a repository
-secret called `OPENROUTER_API_KEY`.
+secret called `OPENROUTER_API_KEY`. The AI issue/PR summarizer reuses this same
+secret; setting it does not trigger a release or change the release process.
 
 **With the GitHub CLI**
 
@@ -42,8 +43,10 @@ Without the secret nothing breaks: the notes fall back to the `CHANGELOG.md`
 section for the version, with a one-line note saying so.
 
 The key is only ever read from the environment inside the workflow step, is
-never written to a file, and GitHub masks it in logs. The script sends nothing
-but the prompt (commit subjects plus the changelog entry) to OpenRouter.
+never written to a file, and GitHub masks it in logs. The release script sends
+only its prompt (commit subjects plus the changelog entry) to OpenRouter. The
+separate issue/PR summarizer sends public submission text and bounded PR diff
+excerpts, never API credentials; see [CONTRIBUTING.md](CONTRIBUTING.md#ai-issue-and-pr-summaries).
 
 ---
 
