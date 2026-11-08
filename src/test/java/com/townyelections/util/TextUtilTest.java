@@ -13,7 +13,7 @@ class TextUtilTest {
     @Test
     void translatesLegacyColourCodes() {
         assertEquals(SECTION + "cRed", TextUtil.legacy("&cRed"));
-        assertEquals(SECTION + "a&b are fine", TextUtil.legacy("&a&b are fine"));
+        assertEquals(SECTION + "a" + SECTION + "b are fine", TextUtil.legacy("&a&b are fine"));
     }
 
     @Test
@@ -26,6 +26,8 @@ class TextUtilTest {
     @Test
     void leavesPlainTextUntouched() {
         assertEquals("plain text", TextUtil.legacy("plain text"));
+        // '&' followed by something that is not a colour/format code stays literal.
+        assertEquals("S&P 500 & more", TextUtil.legacy("S&P 500 & more"));
         assertEquals("", TextUtil.legacy(null));
     }
 

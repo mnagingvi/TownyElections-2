@@ -105,7 +105,7 @@ class ElectionTallyTest {
     }
 
     @Test
-    void votersCanChangeTheirBallotWhenEnabled() {
+    void castingAgainReplacesTheEarlierBallot() {
         Election election = election(VotingSystem.PLURALITY);
         election.castVote(V1, ALICE);
         election.castVote(V1, CAROL);
