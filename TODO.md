@@ -4,4 +4,16 @@ These are not guaranteed to be added, these are just ideas which you can use if 
 
 - [ ] geyserMC extension - make an extension for geyserMC for a better experience for bedrock users
 
-- [ ] compatibility with other plugins - maybe compatibility for some towny war plugins? 
+- [ ] compatibility with other plugins - maybe compatibility for some towny war plugins?
+
+- [ ] candidacy fees and winner rewards - the old `election.economy` config options were
+      removed because they were never wired up; a real implementation needs a Vault
+      (or PlayerPoints) economy hook, a fee charged on `/election run`, and a payout
+      with a note on the winner announcement.
+
+- [ ] candidate profiles - `/election profile` was documented but never implemented;
+      a long-form bio on `Candidate` shown on the candidate head tooltip would pair
+      well with the existing campaign message.
+
+- [ ] election night extras - a pre-close countdown boss bar ("polls close in 10m"),
+      a configurable fireworks palette, and an optional results webhook for Discord.
