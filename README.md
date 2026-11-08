@@ -44,7 +44,7 @@ Towny town ranks (plot management, etc.) and/or mayorship you configure.
   click-driven election desk, inspect candidates, and vote from player-head icons.
 - **Voting** — one command to cast (and optionally change) a vote, with eligibility
   restricted to town residents. Supports secret ballots (hidden tallies).
-- **Per-IP vote protection** — optionally limit each active town or nation election
+- **Per-IP vote protection** — optionally limit each active election
   to a configured number of distinct IP fingerprints to reduce alt-account abuse.
 - **Three electoral systems** — classic **plurality**, **ranked-choice**
   (instant-runoff with automatic elimination rounds and round-by-round results),
@@ -131,7 +131,6 @@ literal below is **configurable** in `config.yml` under the `commands:` section.
 | `/election run`                 | `townyelections.candidate`| Stand as a candidate.                |
 | `/election withdraw`            | `townyelections.candidate`| Withdraw from the race.              |
 | `/election campaign <message>`  | `townyelections.candidate`| Set your campaign message.           |
-| `/election profile <profile>`   | `townyelections.candidate`| Set your candidate profile/bio.      |
 | `/election party <name>`       | `townyelections.candidate`| Join or create a political party.    |
 | `/election parties`            | `townyelections.info`     | List current parties and standings.  |
 | `/election vote <candidate...>` | `townyelections.vote`     | Cast (or change) your vote or ballot. |
@@ -144,37 +143,8 @@ literal below is **configurable** in `config.yml` under the `commands:` section.
 | `/election stop [town]`         | `townyelections.admin`    | End voting early and tally.          |
 | `/election cancel [town]`       | `townyelections.admin`    | Cancel with no winner.               |
 | `/election reload`              | `townyelections.admin`    | Reload configuration.                |
-| `/election nation <sub-command>`| varies by sub-command     | Run any of the above for your nation. |
 
 Admins may target another town by name; otherwise the sender's own town is used.
-
-### Nation elections
-
-TownyElections can run nation-wide elections alongside town elections. Prefix any
-sub-command with the configurable `nation` literal to target your **nation**
-instead of your town — every resident of every town in the nation may stand and
-vote:
-
-```text
-/election nation start                 # admin: start a nation election (or start <nation>)
-/election nation run                   # stand as a candidate in the nation election
-/election nation vote Alice            # vote in the nation election
-/election nation status                # view the nation election
-/election nation results               # view the last nation results
-```
-
-Nation elections reuse the durations, voting system, tie-breaker, and campaign
-settings used for towns. Nation-specific behaviour is configured under the
-`nation:` and `winner:` sections of `config.yml`:
-
-- `nation.enabled` — master switch for nation elections and the `nation` sub-command.
-- `nation.min-residents` — minimum nation residents required to hold an election.
-- `nation.auto-schedule` — auto-start nation elections on the town auto-schedule cadence.
-- `winner.grant-nation-ranks` — Towny **nation** ranks granted to a nation winner.
-- `winner.set-as-king` — transfer nation leadership (kingship) to the winner.
-
-Admins may target another nation by name (`/election nation start <nation>`);
-otherwise the sender's own nation is used.
 
 ### Inventory GUI
 
@@ -187,10 +157,10 @@ The candidate roster uses player heads as vote buttons. Under plurality a click
 casts your vote; under ranked choice each click adds that candidate as your next
 preference (heads show your current rank and full ballot); under approval each
 click toggles your approval. A clear-ballot button resets ranked or approval
-ballots. Hovering a candidate head shows their party, campaign message, candidate
-profile, and visible vote data when live results are enabled. Campaign messages,
-candidate profiles, and party names can be set from the menu by clicking the
-matching item and typing the new value in chat; the plugin consumes that one chat message and applies the normal
+ballots. Hovering a candidate head shows their party, campaign message, and
+visible vote data when live results are enabled. Campaign messages and party
+names can be set from the menu by clicking the matching item and typing the new
+value in chat; the plugin consumes that one chat message and applies the normal
 validation.
 
 The GUI still enforces the same permissions, Towny residency checks, voting phase
@@ -265,7 +235,7 @@ registry so they survive the election ending.
 /election party rename Reform Unity   # admin: rename a party in this election
 ```
 
-When a resident leaves their town (or nation), their standing-party membership
+When a resident leaves their town, their standing-party membership
 is automatically cleared so no stale parties linger. Standing parties are
 persisted in `data.yml` under the `standing-parties` section and reload safely
 across restarts; old data files without that section load unchanged.
@@ -279,7 +249,7 @@ results.
 
 When a resident registers with `/election run`, the plugin also sends them a
 short list of recommended next steps (set a campaign message, join a party,
-colour it, and write a profile).
+and colour it).
 
 Candidate lists and final results show each candidate's party. Party standings
 show candidate counts, and show vote totals whenever live results are public or
@@ -374,12 +344,16 @@ console warning. Command placeholders: `{winner}`, `{winner_uuid}`, `{town}`,
 ## Configuration highlights
 
 Durations accept friendly strings like `30s`, `10m`, `2h`, `3d`, `1w`, or
-combinations such as `1w3d12h`. Candidates can set a short campaign message and a longer candidate profile/bio for voters to read. Candidates can join an existing party or create a new party label with `/election party <name>`; tab completion suggests current parties. Party standings are available with `/election parties`, and final results include party-level vote totals plus winner command placeholders.
+combinations such as `1w3d12h`. Candidates set a campaign message and can join an
+existing party or create a new party label with `/election party <name>`; tab
+completion suggests current parties. Party standings are available with
+`/election parties`, and final results include party-level vote totals plus
+winner command placeholders.
 
 By default (`campaign.lock-edits-during-voting: true`), candidates cannot change
-their campaign message, profile, party, or party colour once the voting phase has
-begun — these can only be edited during the nomination phase. Set it to `false`
-to allow edits at any time.
+their campaign message, party, or party colour once the voting phase has begun —
+these can only be edited during the nomination phase. Set it to `false` to allow
+edits at any time.
 
 ```yaml
 election:
@@ -389,12 +363,12 @@ election:
   max-candidates: 0            # 0 = unlimited
   auto-win-single-candidate: true
   allow-vote-changes: true
-  public-live-results: false   # false = secret ballot
+  public-live-results: true    # false = secret ballot
   voting-system: "PLURALITY"   # PLURALITY | RANKED_CHOICE | APPROVAL
-  tie-breaker: "INCUMBENT"     # RANDOM | EARLIEST | INCUMBENT | RUNOFF | NONE
+  tie-breaker: "RUNOFF"        # RANDOM | EARLIEST | INCUMBENT | RUNOFF | NONE
   auto-schedule:
-    enabled: false
-    interval: "30d"
+    enabled: true
+    interval: "14d"
   ip-vote-limit:
     enabled: false
     max-votes: 0                 # 0 = unlimited
@@ -434,10 +408,6 @@ If PlaceholderAPI is installed, these placeholders are available (identifier
 | `%townyelections_last_winner_votes%`| Votes received by the last winner.   |
 | `%townyelections_last_turnout%`     | Turnout of the last election, in percent. |
 | `%townyelections_night_running%`    | `true` while a night show is live.   |
-
-Every placeholder also has a `nation_` variant (for example
-`%townyelections_nation_phase%` or `%townyelections_nation_last_winner%`) that
-resolves against the player's **nation** election instead of their town election.
 
 ---
 
