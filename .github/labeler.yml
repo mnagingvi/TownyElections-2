@@ -1,0 +1,62 @@
+# Path-based labels applied to pull requests by .github/workflows/labeler.yml.
+# Every label listed here exists in .github/labels.yml, so the two stay in step.
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "LICENSE"
+
+configuration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/resources/config.yml"
+          - "src/main/java/com/townyelections/manager/ConfigManager.java"
+
+translations:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/resources/messages_*.yml"
+
+counting:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/java/com/townyelections/model/**"
+          - "src/test/java/com/townyelections/model/**"
+
+election-night:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/java/com/townyelections/night/**"
+
+commands:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/java/com/townyelections/commands/**"
+          - "src/main/java/com/townyelections/manager/MessageManager.java"
+
+gui:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/java/com/townyelections/gui/**"
+
+placeholders:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/java/com/townyelections/integration/ElectionsPlaceholderExpansion.java"
+
+integration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/main/java/com/townyelections/integration/**"
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "pom.xml"
+          - ".github/dependabot.yml"
