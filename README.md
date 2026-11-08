@@ -3,6 +3,7 @@
 
 [![Build](https://github.com/mnagingvi/TownyElections-2/actions/workflows/build.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/build.yml)
 [![CodeQL](https://github.com/mnagingvi/TownyElections-2/actions/workflows/codeql.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/codeql.yml)
+[![Lint](https://github.com/mnagingvi/TownyElections-2/actions/workflows/lint.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/lint.yml)
 [![Unit tests](https://img.shields.io/badge/tests-JUnit%205-25a162?logo=junit5&logoColor=white)](https://github.com/mnagingvi/TownyElections-2/tree/main/src/test/java)
 [![Latest release](https://img.shields.io/github/v/release/mnagingvi/TownyElections-2?label=release&logo=github)](https://github.com/mnagingvi/TownyElections-2/releases)
 [![Downloads](https://img.shields.io/github/downloads/mnagingvi/TownyElections-2/total?label=downloads&logo=github)](https://github.com/mnagingvi/TownyElections-2/releases)
