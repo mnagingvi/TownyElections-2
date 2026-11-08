@@ -2,6 +2,8 @@
 ![ownyElections](https://capsule-render.vercel.app/api?type=blur&height=300&color=gradient&section=header&reversal=false&text=TownyElections&textBg=false&fontSize=70&fontAlign=50&fontAlignY=50&rotate=0&strokeWidth=0&desc=Add+Actual+Elections+To+Your+Minecraft+Server.&descSize=20&descAlign=50&descAlignY=70)
 
 [![Build](https://github.com/mnagingvi/TownyElections-2/actions/workflows/build.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/build.yml)
+[![CodeQL](https://github.com/mnagingvi/TownyElections-2/actions/workflows/codeql.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/codeql.yml)
+[![Unit tests](https://img.shields.io/badge/tests-JUnit%205-25a162?logo=junit5&logoColor=white)](https://github.com/mnagingvi/TownyElections-2/tree/main/src/test/java)
 [![Latest release](https://img.shields.io/github/v/release/mnagingvi/TownyElections-2?label=release&logo=github)](https://github.com/mnagingvi/TownyElections-2/releases)
 [![Downloads](https://img.shields.io/github/downloads/mnagingvi/TownyElections-2/total?label=downloads&logo=github)](https://github.com/mnagingvi/TownyElections-2/releases)
 [![Contributors](https://img.shields.io/github/contributors/mnagingvi/TownyElections-2?label=contributors&logo=github)](https://github.com/mnagingvi/TownyElections-2/graphs/contributors)
@@ -24,6 +26,9 @@ Towny town ranks (plot management, etc.) and/or mayorship you configure.
 | [Issues](https://github.com/mnagingvi/TownyElections-2/issues)
 | [Changelog](CHANGELOG.md)
 | [bStats](https://bstats.org/plugin/bukkit/townyelections-2/35211)
+| [Contributing](CONTRIBUTING.md)
+| [Security policy](SECURITY.md)
+| [Code of conduct](CODE_OF_CONDUCT.md)
 | [Towny](https://github.com/TownyAdvanced/Towny)
 
 ---
@@ -118,6 +123,19 @@ your server's `plugins/` folder alongside Towny.
 
 > The build depends on the Paper API, Towny (via JitPack), and PlaceholderAPI
 > repositories, all declared in `pom.xml`.
+
+`mvn package` also runs the unit tests in `src/test/java`. They cover the parts
+that are pure Java and easy to get wrong — the instant-runoff counter, ballot
+handling and tallies, duration parsing and colour codes — so no server is
+needed to check them:
+
+```bash
+mvn test          # just the tests
+mvn clean package # tests, then the shaded jar
+```
+
+CI runs the same build for every branch and pull request, and CodeQL scans the
+plugin for security and quality problems.
 
 ---
 
@@ -452,13 +470,19 @@ correctly across restarts.
 
 Bug reports, feature ideas, and pull requests are welcome. Please use the
 [issue tracker](https://github.com/mnagingvi/TownyElections-2/issues) and keep
-changes focused on the existing Paper/Towny workflow.
+changes focused on the existing Paper/Towny workflow. The
+[contributing guide](CONTRIBUTING.md) explains the layout of the source tree
+and the conventions the code follows, and everyone taking part is expected to
+follow the [code of conduct](CODE_OF_CONDUCT.md).
 
 Before submitting a code change, run:
 
 ```bash
 mvn clean package
 ```
+
+Please report anything that looks like a security problem privately through
+[SECURITY.md](SECURITY.md) rather than in a public issue.
 
 ---
 
