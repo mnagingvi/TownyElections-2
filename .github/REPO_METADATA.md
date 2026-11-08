@@ -50,7 +50,7 @@ the platform (`paper`, `bukkit`, `java`, `java21`), the integration
 
 ## Releases and tags
 
-Tags are annotated and match `pom.xml` (`1.3.0` → `v1.3.0`); pushing the tag
-runs `.github/workflows/release.yml`, which builds the jar and attaches it to
-the release with generated notes. `main` additionally keeps a rolling
+Tags are annotated and match `pom.xml` (`2.0.0` → `v2.0.0`); pushing the tag
+runs `.github/workflows/release.yml`, which builds the jar and publishes the
+release with AI-written notes. See [RELEASING.md](../RELEASING.md). `main` additionally keeps a rolling
 `nightly` prerelease that is replaced on every push.
