@@ -80,7 +80,7 @@ These images update automatically from GitHub and bStats.
 
 <p align="center">
   <a href="https://github.com/mnagingvi/TownyElections-2/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=mnagingvi/TownyElections-2&max=1000" alt="TownyElections contributors" />
+    <img src="https://contrib.rocks/image?repo=mnagingvi/TownyElections-2&max=10" alt="TownyElections contributors" />
   </a>
 </p>
 
