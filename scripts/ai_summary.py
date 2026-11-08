@@ -30,7 +30,6 @@ from ai_release_notes import DEFAULT_ENDPOINT, DEFAULT_MODEL, REPO_URL, env_or
 
 MARKER = "<!-- townyelections-ai-summary -->"
 BOT_LOGIN = "github-actions[bot]"
-TRUSTED_ASSOCIATIONS = {"OWNER", "MEMBER", "COLLABORATOR"}
 EXEMPT_LABELS = {"security", "pinned"}
 SPAM_CONFIDENCE = 0.98
 BODY_LIMIT = 10_000
@@ -51,12 +50,17 @@ item. Do not invent facts or claim tests passed. Explicitly acknowledge when the
 body or diff is truncated. Do not reproduce promotional links, HTML, or @mentions.
 
 Be conservative: 'spam' means unmistakably unsolicited advertising, a scam or
-phishing attempt, or link promotion with no good-faith connection to this
-project. A short or empty report, missing details, a duplicate, an off-topic
-question, non-English text, criticism, or a security report is NOT enough to call
-something spam. Use 'unclear' when uncertain. For spam, quote at least 12
-characters verbatim from the supplied title, body, or patch as evidence and give
-confidence >= 0.98 only when the evidence clearly meets the spam definition.
+phishing attempt, link promotion with no good-faith connection to this project,
+or obvious junk such as a title/body made only of meaningless keyboard-mashing
+characters with no actionable project content. For a PR, also treat a change
+whose only purpose is nonsense or vandalism (for example replacing a valid build
+command with random characters) as spam. Apply these rules to every human author;
+being a maintainer does not make junk legitimate. A merely short or empty report,
+missing details, a duplicate, an off-topic question, non-English text, criticism,
+or a security report is NOT enough to call something spam. Use 'unclear' when
+uncertain. For spam, quote at least 12 characters verbatim from the supplied
+title, body, or patch as evidence and give confidence >= 0.98 only when the
+evidence clearly meets the spam definition.
 Reply with JSON only, no Markdown fence or preamble.
 """
 
@@ -258,7 +262,6 @@ def protected(item: dict[str, Any], kind: str, pr: dict[str, Any] | None = None)
     labels = {str(label.get("name", "")).casefold() for label in item.get("labels", [])}
     return bool(
         item.get("state") != "open"
-        or item.get("author_association") in TRUSTED_ASSOCIATIONS
         or (item.get("user") or {}).get("type") == "Bot"
         or (kind == "pr" and (pr or item).get("draft"))
         or labels & EXEMPT_LABELS
@@ -352,7 +355,7 @@ def run(number_override: str | None = None) -> str:
         api_key, env_or("OPENROUTER_MODEL", DEFAULT_MODEL), context, 60.0), context)
     enabled = env_or("AI_SUMMARY_CLOSE_SPAM", "true").casefold() in {"true", "1", "yes", "on"}
     # Check again after the provider call, before any write. The issues endpoint
-    # supplies author_association and labels; the pulls endpoint supplies draft.
+    # supplies current labels; the pulls endpoint supplies the current draft flag.
     current = client.request("GET", f"/issues/{number}")
     current_pr = client.request("GET", f"/pulls/{number}") if pr else None
     if skip_summary(current, kind, current_pr):

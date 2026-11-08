@@ -145,13 +145,16 @@ without changing the issue or PR.
   patches; issue summaries use the title and body. This public text is sent to
   OpenRouter. Existing comments and API credentials are not sent.
 - Automatic closure requires a spam classification with at least 98% confidence
-  and a matching quote from the submission. Missing details, non-English text,
-  criticism, or an unclear report alone are not spam. Issues close as
-  **not planned**; PRs close without merging. A `spam` label is applied first.
-- Maintainer-authored items can be summarized but never automatically closed.
-  Bots, draft PRs, closed items, and `security`-labelled items are skipped.
-  `pinned` items are never automatically closed. Reopening an item already
-  labelled `spam` will not trigger another automatic closure.
+  and a matching quote from the submission. This includes obvious junk such as
+  meaningless keyboard-mashing, and PRs whose only change is nonsense/vandalism.
+  Missing details, non-English text, criticism, or an unclear report alone are
+  not spam. Issues close as **not planned**; PRs close without merging. A `spam`
+  label is applied first. The workflow has `issues: write` and
+  `pull-requests: write` permission for these closures.
+- Closure applies to human authors, including maintainers. Bots, draft PRs,
+  closed items, and `security`-labelled items are skipped. `pinned` items are
+  never automatically closed. Reopening an item already labelled `spam` will
+  not trigger another automatic closure.
 - To keep summaries but disable all automatic closures, set the repository
   **variable** `AI_SUMMARY_CLOSE_SPAM` to `false` under **Settings → Secrets and
   variables → Actions → Variables**. Closure is enabled when it is unset.
