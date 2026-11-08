@@ -34,7 +34,6 @@ public class ConfigManager {
     private int maxCandidates;
     private boolean autoWinSingleCandidate;
     private int minTownResidents;
-    private int votesPerResident;
     private boolean allowVoteChanges;
     private boolean publicLiveResults;
     private boolean allowSelfVote;
@@ -43,8 +42,6 @@ public class ConfigManager {
     private long runoffDurationMs;
     private boolean autoScheduleEnabled;
     private long autoScheduleIntervalMs;
-    private double candidacyCost;
-    private double winnerReward;
     private boolean ipVoteLimitEnabled;
     private int ipVoteLimitMax;
 
@@ -70,6 +67,21 @@ public class ConfigManager {
     private long votingReminderBeforeEndMs;
     private boolean notifyOnJoin;
 
+    // election night
+    private boolean nightEnabled;
+    private int nightMinimumVotes;
+    private boolean nightDeferAnnouncements;
+    private String nightRevealOrder;
+    private int nightStageDelayTicks;
+    private int nightIntroDelayTicks;
+    private int nightWinnerHoldTicks;
+    private boolean nightBossBar;
+    private boolean nightTitles;
+    private boolean nightSounds;
+    private boolean nightFireworks;
+    private int nightFireworkCount;
+    private boolean nightBroadcastServerWide;
+
     public ConfigManager(TownyElections plugin) {
         this.plugin = plugin;
     }
@@ -84,7 +96,7 @@ public class ConfigManager {
         metrics = c.getBoolean("general.metrics", true);
 
         updateCheckerEnabled = c.getBoolean("update-checker.enabled", true);
-        updateRepository = c.getString("update-checker.github-repository", "vingaming1113/TownyElections");
+        updateRepository = c.getString("update-checker.github-repository", "mnagingvi/TownyElections-2");
         updateNotifyAdminsOnJoin = c.getBoolean("update-checker.notify-admins-on-join", true);
 
         nominationDurationMs = DurationUtil.parseMillis(c.getString("election.nomination-duration"), days(2));
@@ -93,7 +105,6 @@ public class ConfigManager {
         maxCandidates = Math.max(0, c.getInt("election.max-candidates", 0));
         autoWinSingleCandidate = c.getBoolean("election.auto-win-single-candidate", true);
         minTownResidents = Math.max(1, c.getInt("election.min-town-residents", 2));
-        votesPerResident = Math.max(1, c.getInt("election.votes-per-resident", 1));
         allowVoteChanges = c.getBoolean("election.allow-vote-changes", true);
         publicLiveResults = c.getBoolean("election.public-live-results", false);
         allowSelfVote = c.getBoolean("election.allow-self-vote", true);
@@ -102,8 +113,6 @@ public class ConfigManager {
         runoffDurationMs = DurationUtil.parseMillis(c.getString("election.runoff-duration"), days(1));
         autoScheduleEnabled = c.getBoolean("election.auto-schedule.enabled", false);
         autoScheduleIntervalMs = DurationUtil.parseMillis(c.getString("election.auto-schedule.interval"), days(30));
-        candidacyCost = c.getDouble("election.economy.candidacy-cost", 0.0);
-        winnerReward = c.getDouble("election.economy.winner-reward", 0.0);
         ipVoteLimitEnabled = c.getBoolean("election.ip-vote-limit.enabled", false);
         ipVoteLimitMax = Math.max(0, c.getInt("election.ip-vote-limit.max-votes", 0));
 
@@ -125,6 +134,21 @@ public class ConfigManager {
         broadcastServerWide = c.getBoolean("notifications.broadcast-server-wide", false);
         votingReminderBeforeEndMs = DurationUtil.parseMillis(c.getString("notifications.voting-reminder-before-end"), hours(6));
         notifyOnJoin = c.getBoolean("notifications.notify-on-join", true);
+
+        nightEnabled = c.getBoolean("election-night.enabled", true);
+        nightMinimumVotes = Math.max(0, c.getInt("election-night.minimum-votes", 1));
+        nightDeferAnnouncements = c.getBoolean("election-night.defer-announcements", true);
+        nightRevealOrder = c.getString("election-night.reveal-order", "WORST_FIRST")
+                .trim().toUpperCase(Locale.ROOT);
+        nightStageDelayTicks = Math.max(1, c.getInt("election-night.stage-delay-ticks", 40));
+        nightIntroDelayTicks = Math.max(0, c.getInt("election-night.intro-delay-ticks", 60));
+        nightWinnerHoldTicks = Math.max(0, c.getInt("election-night.winner-hold-ticks", 100));
+        nightBossBar = c.getBoolean("election-night.boss-bar", true);
+        nightTitles = c.getBoolean("election-night.titles", true);
+        nightSounds = c.getBoolean("election-night.sounds", true);
+        nightFireworks = c.getBoolean("election-night.fireworks", true);
+        nightFireworkCount = Math.max(0, Math.min(24, c.getInt("election-night.firework-count", 6)));
+        nightBroadcastServerWide = c.getBoolean("election-night.broadcast-server-wide", true);
     }
 
     private static long days(long d) {
@@ -151,7 +175,6 @@ public class ConfigManager {
     public int getMaxCandidates() { return maxCandidates; }
     public boolean isAutoWinSingleCandidate() { return autoWinSingleCandidate; }
     public int getMinTownResidents() { return minTownResidents; }
-    public int getVotesPerResident() { return votesPerResident; }
     public boolean isAllowVoteChanges() { return allowVoteChanges; }
     public boolean isPublicLiveResults() { return publicLiveResults; }
     public boolean isAllowSelfVote() { return allowSelfVote; }
@@ -160,8 +183,6 @@ public class ConfigManager {
     public long getRunoffDurationMs() { return runoffDurationMs; }
     public boolean isAutoScheduleEnabled() { return autoScheduleEnabled; }
     public long getAutoScheduleIntervalMs() { return autoScheduleIntervalMs; }
-    public double getCandidacyCost() { return candidacyCost; }
-    public double getWinnerReward() { return winnerReward; }
     public boolean isIpVoteLimitEnabled() { return ipVoteLimitEnabled; }
     public int getIpVoteLimitMax() { return ipVoteLimitMax; }
 
@@ -183,4 +204,20 @@ public class ConfigManager {
     public boolean isBroadcastServerWide() { return broadcastServerWide; }
     public long getVotingReminderBeforeEndMs() { return votingReminderBeforeEndMs; }
     public boolean isNotifyOnJoin() { return notifyOnJoin; }
+
+    // ---- Election Night -----------------------------------------------------
+
+    public boolean isNightEnabled() { return nightEnabled; }
+    public int getNightMinimumVotes() { return nightMinimumVotes; }
+    public boolean isNightDeferAnnouncements() { return nightDeferAnnouncements; }
+    public String getNightRevealOrder() { return nightRevealOrder; }
+    public int getNightStageDelayTicks() { return nightStageDelayTicks; }
+    public int getNightIntroDelayTicks() { return nightIntroDelayTicks; }
+    public int getNightWinnerHoldTicks() { return nightWinnerHoldTicks; }
+    public boolean isNightBossBar() { return nightBossBar; }
+    public boolean isNightTitles() { return nightTitles; }
+    public boolean isNightSounds() { return nightSounds; }
+    public boolean isNightFireworks() { return nightFireworks; }
+    public int getNightFireworkCount() { return nightFireworkCount; }
+    public boolean isNightBroadcastServerWide() { return nightBroadcastServerWide; }
 }

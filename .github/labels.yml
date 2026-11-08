@@ -1,0 +1,58 @@
+# Labels managed by .github/workflows/labels.yml (EndBug/label-sync).
+# Existing labels that are not listed here are left alone, so the GitHub
+# default set (bug, enhancement, documentation, ...) keeps working.
+#
+# Colours are hex without the leading '#'. Keep descriptions short: they are
+# what shows up in the label picker and in the issue list tooltip.
+
+- name: ci
+  color: "1f6feb"
+  description: GitHub Actions workflows and repo automation
+
+- name: dependencies
+  color: "0366d6"
+  description: Dependency bumps, Dependabot and version pinning
+
+- name: configuration
+  color: "5319e7"
+  description: config.yml, ConfigManager and config migration
+
+- name: translations
+  color: "0e8a16"
+  description: Message files and locale coverage
+
+- name: election-night
+  color: "6f42c1"
+  description: The election night show - titles, boss bar, fireworks
+
+- name: counting
+  color: "f9d0c4"
+  description: Ballot tallying, instant-runoff rounds and results
+
+- name: commands
+  color: "c2e0c6"
+  description: /election sub-commands, permissions and messages
+
+- name: gui
+  color: "1d76db"
+  description: Election desk menu and inventory views
+
+- name: placeholders
+  color: "006b75"
+  description: PlaceholderAPI expansion and its placeholders
+
+- name: integration
+  color: "bfd4f2"
+  description: Towny hooks, constituents and other plugin integrations
+
+- name: security
+  color: "b60205"
+  description: Security-sensitive change - see SECURITY.md
+
+- name: release
+  color: "c5def5"
+  description: Versioning, tags and release workflow work
+
+- name: needs-info
+  color: "fbca04"
+  description: Waiting on more details from the reporter

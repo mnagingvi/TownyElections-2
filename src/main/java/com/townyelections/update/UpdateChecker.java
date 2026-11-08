@@ -69,7 +69,7 @@ public class UpdateChecker {
             String url = API_BASE + project.trim() + "/releases";
             HttpRequest request = HttpRequest.newBuilder(URI.create(url))
                     .header("User-Agent",
-                            "vingaming1113/TownyElections/" + getCurrentVersion()
+                            project.trim() + "/" + getCurrentVersion()
                                     + " (Minecraft update checker)")
                     .header("Accept", "application/json")
                     .timeout(Duration.ofSeconds(15))

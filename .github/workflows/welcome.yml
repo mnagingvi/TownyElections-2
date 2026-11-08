@@ -1,0 +1,52 @@
+name: Welcome
+
+on:
+  issues:
+    types: [ opened ]
+  pull_request_target:
+    types: [ opened ]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  greet:
+    name: Greet first-time contributors
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Post a welcome comment
+        uses: actions/first-interaction@v3
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: |
+            👋 Thanks for opening your first issue here, and welcome!
+
+            To get this looked at quickly, please make sure the report includes:
+
+            - the TownyElections version (`/election` shows it in the menu title) and your Paper build,
+            - your Towny version,
+            - whether the problem happens on a fresh `config.yml` or only on your existing one,
+            - the relevant lines from `logs/latest.log`, and any error from startup.
+
+            If it is a usage question rather than a bug, a
+            [Discussion](https://github.com/mnagingvi/TownyElections-2/discussions)
+            is the better place. Security problems should go through
+            [SECURITY.md](https://github.com/mnagingvi/TownyElections-2/blob/main/SECURITY.md)
+            instead of a public issue.
+          pr_message: |
+            👋 Thanks for your first pull request here, and welcome!
+
+            A few things that make review easy:
+
+            - CI has to be green: it runs `mvn package`, which includes the unit tests.
+            - If you changed anything users see, add the text to `messages_en.yml`
+              (other locales can follow separately) and mention it in `CHANGELOG.md`.
+            - If you changed `config.yml`, say whether existing installs need a
+              migration and whether `config-version` should move.
+            - Fill in the PR template - especially *how you tested it*, since CI
+              cannot join a server.
+
+            Someone will take a look as soon as possible. Thanks for helping!

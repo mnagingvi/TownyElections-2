@@ -9,23 +9,69 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    name: Publish release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          # Full history and tags: the release notes are written from the
+          # commits since the previous tag.
+          fetch-depth: 0
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
           cache: maven
 
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
       - name: Build with Maven
         run: mvn -B clean package --file pom.xml
 
+      - name: Check the tag matches the pom version
+        run: |
+          pom_version="$(mvn -B -q help:evaluate -Dexpression=project.version -DforceStdout)"
+          tag_version="${GITHUB_REF_NAME#v}"
+          echo "tag: $tag_version, pom: $pom_version"
+          if [ "$pom_version" != "$tag_version" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match <version>${pom_version}</version> in pom.xml"
+            exit 1
+          fi
+
+      - name: Write the release notes
+        env:
+          # Repository secret: Settings -> Secrets and variables -> Actions.
+          # Without it the step still succeeds, using the changelog verbatim.
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          # Optional repository variable to pin a model, e.g. "openai/gpt-4.1-mini".
+          OPENROUTER_MODEL: ${{ vars.OPENROUTER_MODEL }}
+        run: |
+          python3 scripts/ai_release_notes.py --out release-notes.md
+          {
+            echo "## Release notes that will be published"
+            echo
+            cat release-notes.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the release notes
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-notes
+          path: release-notes.md
+          if-no-files-found: error
+
       - name: Publish release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: target/TownyElections-*.jar
+          fail_on_unmatched_files: true
+          # Our summary first, then GitHub's generated "What's Changed" list.
+          body_path: release-notes.md
           generate_release_notes: true

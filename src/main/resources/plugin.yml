@@ -4,7 +4,7 @@ main: com.townyelections.TownyElections
 api-version: '1.21'
 author: TownyElections
 description: A formal, configurable election system for Towny towns.
-website: https://github.com/TownyAdvanced/Towny
+website: https://github.com/mnagingvi/TownyElections-2
 
 depend:
   - Towny
@@ -28,7 +28,7 @@ permissions:
       townyelections.vote: true
       townyelections.info: true
       townyelections.admin: true
-    townyelections.player:
+  townyelections.player:
     description: Default player permissions
     default: default
     children:

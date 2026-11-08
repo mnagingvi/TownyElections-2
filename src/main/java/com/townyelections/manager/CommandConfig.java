@@ -24,6 +24,7 @@ public class CommandConfig {
     public static final String STATUS = "status";
     public static final String CANDIDATES = "candidates";
     public static final String RESULTS = "results";
+    public static final String NIGHT = "night";
     public static final String START = "start";
     public static final String STOP = "stop";
     public static final String CANCEL = "cancel";
@@ -32,7 +33,7 @@ public class CommandConfig {
 
     private static final String[] ACTIONS = {
             RUN, WITHDRAW, CAMPAIGN, PARTY, PARTIES, VOTE, STATUS, CANDIDATES,
-            RESULTS, START, STOP, CANCEL, RELOAD, HELP
+            RESULTS, NIGHT, START, STOP, CANCEL, RELOAD, HELP
     };
 
     private final TownyElections plugin;

@@ -13,6 +13,7 @@ import com.townyelections.model.ElectionResult;
 import com.townyelections.model.InstantRunoff;
 import com.townyelections.model.TieBreaker;
 import com.townyelections.model.VotingSystem;
+import com.townyelections.night.ElectionNight;
 import com.townyelections.util.DurationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -709,6 +710,10 @@ public class ElectionManager {
         Election election = new Election(c.getUuid(), c.getName(), ElectionPhase.NOMINATION, endsAt);
         election.setVotingSystem(config.getVotingSystem());
         active.put(c.getUuid(), election);
+        // A fresh election supersedes any results show still replaying for this town.
+        if (plugin.getElectionNight() != null) {
+            plugin.getElectionNight().cancelShow(c.getUuid());
+        }
         save();
 
         broadcast(c, "election.started-nomination", MessageManager.placeholders(
@@ -1021,31 +1026,57 @@ public class ElectionManager {
         scheduleNextAuto(constituency.getUuid());
         save();
 
-        // Announce.
-        broadcast(constituency, "election.concluded",
-                MessageManager.placeholders("town", constituency.getName()));
-
-        PartyStanding leadingParty = leadingParty(election, tally);
-        if (leadingParty != null) {
-            broadcast(constituency, "results.leading-party", MessageManager.placeholders(
-                    "party", partyDisplay(election, leadingParty.name()),
-                    "votes", String.valueOf(leadingParty.votes())));
+        // Apply rewards first, but report them afterwards: when an election night
+        // show takes over the announcements it echoes the rewards as its finale.
+        ElectionNight.RewardSummary rewards = ElectionNight.RewardSummary.NONE;
+        if (winnerCandidate != null) {
+            rewards = applyWinnerRewards(constituency, winnerCandidate, winnerVotes,
+                    election.getTotalVotes());
         }
 
-        if (winnerCandidate != null) {
-            applyWinnerRewards(constituency, winnerCandidate, winnerVotes, election.getTotalVotes());
-            broadcast(constituency, "winner.announce-town",
-                    MessageManager.placeholders("winner", winnerCandidate.getName(),
-                            "party", partyDisplay(election, winnerCandidate.getPartyName()),
-                            "town", constituency.getName()));
-            if (config.isBroadcastServerWide()) {
-                Bukkit.broadcast(messages.prefixed(messages.raw("winner.announce-server")
-                        .replace("{winner}", winnerCandidate.getName())
-                        .replace("{party}", partyDisplay(election, winnerCandidate.getPartyName()))
-                        .replace("{town}", constituency.getName())));
+        // Election Night can narrate the result instead of announcing it instantly.
+        ElectionNight night = plugin.getElectionNight();
+        boolean showStarted = night != null
+                && night.shouldRun(constituency, result)
+                && night.start(constituency, result, rewards, config.isNightDeferAnnouncements());
+        boolean quiet = showStarted && config.isNightDeferAnnouncements();
+
+        if (!quiet) {
+            // Announce.
+            broadcast(constituency, "election.concluded",
+                    MessageManager.placeholders("town", constituency.getName()));
+
+            PartyStanding leadingParty = leadingParty(election, tally);
+            if (leadingParty != null) {
+                broadcast(constituency, "results.leading-party", MessageManager.placeholders(
+                        "party", partyDisplay(election, leadingParty.name()),
+                        "votes", String.valueOf(leadingParty.votes())));
             }
-        } else {
-            broadcast(constituency, "results.no-winner", null);
+
+            if (winnerCandidate != null) {
+                broadcast(constituency, "winner.announce-town",
+                        MessageManager.placeholders("winner", winnerCandidate.getName(),
+                                "party", partyDisplay(election, winnerCandidate.getPartyName()),
+                                "town", constituency.getName()));
+                if (config.isBroadcastServerWide()) {
+                    Bukkit.broadcast(messages.prefixed(messages.raw("winner.announce-server")
+                            .replace("{winner}", winnerCandidate.getName())
+                            .replace("{party}", partyDisplay(election, winnerCandidate.getPartyName()))
+                            .replace("{town}", constituency.getName())));
+                }
+                if (!rewards.ranks().isEmpty()) {
+                    broadcast(constituency, "winner.ranks-granted", MessageManager.placeholders(
+                            "winner", winnerCandidate.getName(),
+                            "ranks", String.join(", ", rewards.ranks())));
+                }
+                if (rewards.madeLeader()) {
+                    broadcast(constituency, "winner.made-mayor", MessageManager.placeholders(
+                            "winner", winnerCandidate.getName(),
+                            "town", constituency.getName()));
+                }
+            } else {
+                broadcast(constituency, "results.no-winner", null);
+            }
         }
 
         // Loss commands for the other candidates.
@@ -1087,10 +1118,19 @@ public class ElectionManager {
     private record PartyStanding(String name, int votes) {
     }
 
-    /** Grant the winner their configured Towny ranks / leadership and run commands. */
-    private void applyWinnerRewards(Constituency constituency, Candidate winner, int winnerVotes, int totalVotes) {
+    /**
+     * Grant the winner their configured Towny ranks / leadership and run commands.
+     *
+     * <p>Announcements are deliberately left to the caller: an election night
+     * show echoes the granted rewards at the end of its reveal instead.
+     */
+    private ElectionNight.RewardSummary applyWinnerRewards(Constituency constituency, Candidate winner,
+                                                          int winnerVotes, int totalVotes) {
         List<String> ranks = config.getGrantTownRanks();
         boolean setLeader = config.isSetAsMayor();
+
+        List<String> applied = List.of();
+        boolean madeLeader = false;
 
         Resident winnerResident = towny.getResident(winner.getUuid());
         if (winnerResident == null) {
@@ -1105,18 +1145,9 @@ public class ElectionManager {
                 }
             }
 
-            List<String> applied = constituency.grantRanks(winnerResident, ranks);
-            if (!applied.isEmpty()) {
-                broadcast(constituency, "winner.ranks-granted", MessageManager.placeholders(
-                        "winner", winner.getName(), "ranks", String.join(", ", applied)));
-            }
-
+            applied = constituency.grantRanks(winnerResident, ranks);
             if (setLeader) {
-                if (constituency.setLeader(winnerResident)) {
-                    broadcast(constituency, "winner.made-mayor",
-                            MessageManager.placeholders(
-                                    "winner", winner.getName(), "town", constituency.getName()));
-                }
+                madeLeader = constituency.setLeader(winnerResident);
             }
         }
 
@@ -1129,6 +1160,8 @@ public class ElectionManager {
                 "town", constituency.getName(),
                 "votes", String.valueOf(winnerVotes),
                 "total_votes", String.valueOf(totalVotes)));
+
+        return new ElectionNight.RewardSummary(applied, madeLeader);
     }
 
     private void runConfiguredCommands(List<String> commandsList, Map<String, String> placeholders) {

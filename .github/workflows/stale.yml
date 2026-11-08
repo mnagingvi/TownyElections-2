@@ -1,0 +1,62 @@
+name: Stale
+
+on:
+  schedule:
+    # Daily, 03:17 UTC - well away from the CodeQL and Dependabot schedules.
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    name: Mark and close stale issues and PRs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Run the stale bot
+        uses: actions/stale@v11
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Issues: quiet for 45 days -> stale, 14 more days -> closed.
+          days-before-issue-stale: 45
+          days-before-issue-close: 14
+          stale-issue-label: "needs-info"
+          exempt-issue-labels: "security,good first issue,help wanted,pinned"
+          stale-issue-message: |
+            This issue has been quiet for a while, so it is being marked stale.
+
+            If the problem still happens on the latest release, please reply with
+            your TownyElections version, your Paper build and a fresh
+            `logs/latest.log` snippet - a comment also clears the stale label.
+            Otherwise it will be closed in 14 days. Reopening later is fine.
+          close-issue-message: |
+            Closing this as stale. If you can still reproduce it, just reopen the
+            issue with your current version and logs - there is no need to file a
+            new one.
+
+          # Pull requests: quiet for 30 days -> stale, 10 more days -> closed.
+          days-before-pr-stale: 30
+          days-before-pr-close: 10
+          stale-pr-label: "needs-info"
+          exempt-pr-labels: "security,dependencies,release,pinned"
+          stale-pr-message: |
+            This pull request has been waiting on changes or a reply for a while,
+            so it is being marked stale.
+
+            A rebase plus a green CI run clears the label. It will be closed in
+            10 days otherwise; the branch stays in the contributor's fork, so
+            nothing is lost and it can always be reopened.
+          close-pr-message: |
+            Closing this pull request as stale. Thanks for the work - reopen or
+            re-push if you want to pick it up again.
+
+          # Reopening or commenting resets the clock; labels are ours to keep.
+          remove-stale-when-updated: true
+          delete-branch: false
+          close-issue-reason: not_planned
+          operations-per-run: 60

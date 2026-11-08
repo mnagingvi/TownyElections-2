@@ -6,7 +6,7 @@
 
     <groupId>com.townyelections</groupId>
     <artifactId>TownyElections</artifactId>
-    <version>1.2.0</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
     <name>TownyElections</name>
@@ -69,8 +69,18 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- JUnit 5: unit tests for the pure election logic (counting, tallies,
+             formatting). Test scope only; never shaded into the plugin jar. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.11.3</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Gson: bundled with the Minecraft server / Paper at runtime, so this
-             is provided (not shaded). Used to parse the Modrinth update API. -->
+             is provided (not shaded). Used to parse the GitHub releases API in
+             the update checker. -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -92,6 +102,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
             </plugin>
 
             <plugin>

@@ -1,0 +1,31 @@
+name: Labels
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ".github/labels.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    name: Sync labels from .github/labels.yml
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Sync labels
+        uses: EndBug/label-sync@v2
+        with:
+          config-file: .github/labels.yml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # Never delete labels that are not in the file - the GitHub default
+          # set (bug, enhancement, good first issue, ...) is still in use.
+          delete-other-labels: false
+          dry-run: false

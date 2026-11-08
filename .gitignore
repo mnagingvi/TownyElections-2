@@ -15,3 +15,11 @@ Thumbs.db
 
 # Maven wrapper (keep if you add it later)
 !.mvn/wrapper/maven-wrapper.jar
+
+# Build outputs from scripts/build_summary.py
+build-report.md
+build.log
+release-notes.md
+
+# Python
+__pycache__/

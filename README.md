@@ -1,13 +1,16 @@
 
 ![ownyElections](https://capsule-render.vercel.app/api?type=blur&height=300&color=gradient&section=header&reversal=false&text=TownyElections&textBg=false&fontSize=70&fontAlign=50&fontAlignY=50&rotate=0&strokeWidth=0&desc=Add+Actual+Elections+To+Your+Minecraft+Server.&descSize=20&descAlign=50&descAlignY=70)
 
-[![Build](https://github.com/vingaming1113/TownyElections/actions/workflows/build.yml/badge.svg)](https://github.com/vingaming1113/TownyElections/actions/workflows/build.yml)
-[![Latest release](https://img.shields.io/github/v/release/vingaming1113/TownyElections?label=release&logo=github)](https://github.com/vingaming1113/TownyElections/releases)
-[![Downloads](https://img.shields.io/github/downloads/vingaming1113/TownyElections/total?label=downloads&logo=github)](https://github.com/vingaming1113/TownyElections/releases)
-[![Contributors](https://img.shields.io/github/contributors/vingaming1113/TownyElections?label=contributors&logo=github)](https://github.com/vingaming1113/TownyElections/graphs/contributors)
-[![Last commit](https://img.shields.io/github/last-commit/vingaming1113/TownyElections?logo=git)](https://github.com/vingaming1113/TownyElections/commits/main)
-[![Issues](https://img.shields.io/github/issues/vingaming1113/TownyElections?logo=github)](https://github.com/vingaming1113/TownyElections/issues)
-[![bStats servers](https://img.shields.io/bstats/servers/32328?label=servers&logo=googleanalytics&logoColor=white)](https://bstats.org/plugin/bukkit/TownyElection/32328)
+[![Build](https://github.com/mnagingvi/TownyElections-2/actions/workflows/build.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/build.yml)
+[![CodeQL](https://github.com/mnagingvi/TownyElections-2/actions/workflows/codeql.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/codeql.yml)
+[![Lint](https://github.com/mnagingvi/TownyElections-2/actions/workflows/lint.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/lint.yml)
+[![Unit tests](https://img.shields.io/badge/tests-JUnit%205-25a162?logo=junit5&logoColor=white)](https://github.com/mnagingvi/TownyElections-2/tree/main/src/test/java)
+[![Latest release](https://img.shields.io/github/v/release/mnagingvi/TownyElections-2?label=release&logo=github)](https://github.com/mnagingvi/TownyElections-2/releases)
+[![Downloads](https://img.shields.io/github/downloads/mnagingvi/TownyElections-2/total?label=downloads&logo=github)](https://github.com/mnagingvi/TownyElections-2/releases)
+[![Contributors](https://img.shields.io/github/contributors/mnagingvi/TownyElections-2?label=contributors&logo=github)](https://github.com/mnagingvi/TownyElections-2/graphs/contributors)
+[![Last commit](https://img.shields.io/github/last-commit/mnagingvi/TownyElections-2?logo=git)](https://github.com/mnagingvi/TownyElections-2/commits/main)
+[![Issues](https://img.shields.io/github/issues/mnagingvi/TownyElections-2?logo=github)](https://github.com/mnagingvi/TownyElections-2/issues)
+[![bStats servers](https://img.shields.io/bstats/servers/35211?label=servers&logo=googleanalytics&logoColor=white)](https://bstats.org/plugin/bukkit/townyelections-2/35211)
 [![Java 21](https://img.shields.io/badge/Java-21-f89820?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![Paper 1.21.4+](https://img.shields.io/badge/Paper-1.21.4%2B-34d399)](https://papermc.io/)
 [![Towny](https://img.shields.io/badge/Towny-required-8b5cf6)](https://github.com/TownyAdvanced/Towny)
@@ -20,9 +23,13 @@ Residents run for office, publish a campaign message, and their fellow townsfolk
 vote. When the election concludes, the winner is automatically granted the
 Towny town ranks (plot management, etc.) and/or mayorship you configure.
 
-**Links:** [Releases](https://github.com/vingaming1113/TownyElections/releases)
-| [Issues](https://github.com/vingaming1113/TownyElections/issues)
-| [bStats](https://bstats.org/plugin/bukkit/TownyElection/32328)
+**Links:** [Releases](https://github.com/mnagingvi/TownyElections-2/releases)
+| [Issues](https://github.com/mnagingvi/TownyElections-2/issues)
+| [Changelog](CHANGELOG.md)
+| [bStats](https://bstats.org/plugin/bukkit/townyelections-2/35211)
+| [Contributing](CONTRIBUTING.md)
+| [Security policy](SECURITY.md)
+| [Code of conduct](CODE_OF_CONDUCT.md)
 | [Towny](https://github.com/TownyAdvanced/Towny)
 
 ---
@@ -35,11 +42,16 @@ Towny town ranks (plot management, etc.) and/or mayorship you configure.
 - **Political parties** — candidates can organize under configurable party labels,
   voters can inspect party standings with `/election parties`, and results include
   party-level vote totals alongside individual winners.
+- **Election Night** — a configurable live results reveal: a title card, a boss-bar
+  scoreboard, candidate-by-candidate reveals (or round-by-round ranked-choice
+  counting), sound cues, and party-coloured fireworks for the winner. Instantly
+  announcements can be deferred so nothing spoils the show, and the last result
+  can be replayed with `/election night`.
 - **Inventory GUI** — players can run `/election` with no arguments to open a
   click-driven election desk, inspect candidates, and vote from player-head icons.
 - **Voting** — one command to cast (and optionally change) a vote, with eligibility
   restricted to town residents. Supports secret ballots (hidden tallies).
-- **Per-IP vote protection** — optionally limit each active town or nation election
+- **Per-IP vote protection** — optionally limit each active election
   to a configured number of distinct IP fingerprints to reduce alt-account abuse.
 - **Three electoral systems** — classic **plurality**, **ranked-choice**
   (instant-runoff with automatic elimination rounds and round-by-round results),
@@ -67,12 +79,12 @@ Towny town ranks (plot management, etc.) and/or mayorship you configure.
 These images update automatically from GitHub and bStats.
 
 <p align="center">
-  <a href="https://github.com/vingaming1113/TownyElections/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=vingaming1113/TownyElections&max=1000" alt="TownyElections contributors" />
+  <a href="https://github.com/mnagingvi/TownyElections-2/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=mnagingvi/TownyElections-2&max=1000" alt="TownyElections contributors" />
   </a>
 </p>
 
-![bStats](https://bstats.org/signatures/bukkit/TownyElection.svg)
+![bStats](https://bstats.org/signatures/bukkit/TownyElections-2.svg)
 
 ---
 
@@ -90,7 +102,7 @@ These images update automatically from GitHub and bStats.
 ## Installation
 
 1. Download the latest jar from the
-   [releases page](https://github.com/vingaming1113/TownyElections/releases).
+   [releases page](https://github.com/mnagingvi/TownyElections-2/releases).
 2. Place it in the server `plugins/` folder.
 3. Make sure [Towny](https://github.com/TownyAdvanced/Towny) is installed.
 4. Restart the server, then edit `plugins/TownyElections/config.yml`.
@@ -113,6 +125,19 @@ your server's `plugins/` folder alongside Towny.
 > The build depends on the Paper API, Towny (via JitPack), and PlaceholderAPI
 > repositories, all declared in `pom.xml`.
 
+`mvn package` also runs the unit tests in `src/test/java`. They cover the parts
+that are pure Java and easy to get wrong — the instant-runoff counter, ballot
+handling and tallies, duration parsing and colour codes — so no server is
+needed to check them:
+
+```bash
+mvn test          # just the tests
+mvn clean package # tests, then the shaded jar
+```
+
+CI runs the same build for every branch and pull request, and CodeQL scans the
+plugin for security and quality problems.
+
 ---
 
 ## Commands
@@ -126,48 +151,20 @@ literal below is **configurable** in `config.yml` under the `commands:` section.
 | `/election run`                 | `townyelections.candidate`| Stand as a candidate.                |
 | `/election withdraw`            | `townyelections.candidate`| Withdraw from the race.              |
 | `/election campaign <message>`  | `townyelections.candidate`| Set your campaign message.           |
-| `/election profile <profile>`   | `townyelections.candidate`| Set your candidate profile/bio.      |
 | `/election party <name>`       | `townyelections.candidate`| Join or create a political party.    |
 | `/election parties`            | `townyelections.info`     | List current parties and standings.  |
 | `/election vote <candidate...>` | `townyelections.vote`     | Cast (or change) your vote or ballot. |
 | `/election status`              | `townyelections.info`     | View the current election.           |
 | `/election candidates`          | `townyelections.info`     | List candidates, parties & campaigns. |
 | `/election results`             | `townyelections.info`     | View the last concluded results.     |
+| `/election night`               | `townyelections.info`     | Replay the last result as an Election Night show. |
+| `/election night skip [town]`   | `townyelections.admin`    | Fast-forward a running show.         |
 | `/election start [town]`        | `townyelections.admin`    | Start an election.                   |
 | `/election stop [town]`         | `townyelections.admin`    | End voting early and tally.          |
 | `/election cancel [town]`       | `townyelections.admin`    | Cancel with no winner.               |
 | `/election reload`              | `townyelections.admin`    | Reload configuration.                |
-| `/election nation <sub-command>`| varies by sub-command     | Run any of the above for your nation. |
 
 Admins may target another town by name; otherwise the sender's own town is used.
-
-### Nation elections
-
-TownyElections can run nation-wide elections alongside town elections. Prefix any
-sub-command with the configurable `nation` literal to target your **nation**
-instead of your town — every resident of every town in the nation may stand and
-vote:
-
-```text
-/election nation start                 # admin: start a nation election (or start <nation>)
-/election nation run                   # stand as a candidate in the nation election
-/election nation vote Alice            # vote in the nation election
-/election nation status                # view the nation election
-/election nation results               # view the last nation results
-```
-
-Nation elections reuse the durations, voting system, tie-breaker, and campaign
-settings used for towns. Nation-specific behaviour is configured under the
-`nation:` and `winner:` sections of `config.yml`:
-
-- `nation.enabled` — master switch for nation elections and the `nation` sub-command.
-- `nation.min-residents` — minimum nation residents required to hold an election.
-- `nation.auto-schedule` — auto-start nation elections on the town auto-schedule cadence.
-- `winner.grant-nation-ranks` — Towny **nation** ranks granted to a nation winner.
-- `winner.set-as-king` — transfer nation leadership (kingship) to the winner.
-
-Admins may target another nation by name (`/election nation start <nation>`);
-otherwise the sender's own nation is used.
 
 ### Inventory GUI
 
@@ -180,10 +177,10 @@ The candidate roster uses player heads as vote buttons. Under plurality a click
 casts your vote; under ranked choice each click adds that candidate as your next
 preference (heads show your current rank and full ballot); under approval each
 click toggles your approval. A clear-ballot button resets ranked or approval
-ballots. Hovering a candidate head shows their party, campaign message, candidate
-profile, and visible vote data when live results are enabled. Campaign messages,
-candidate profiles, and party names can be set from the menu by clicking the
-matching item and typing the new value in chat; the plugin consumes that one chat message and applies the normal
+ballots. Hovering a candidate head shows their party, campaign message, and
+visible vote data when live results are enabled. Campaign messages and party
+names can be set from the menu by clicking the matching item and typing the new
+value in chat; the plugin consumes that one chat message and applies the normal
 validation.
 
 The GUI still enforces the same permissions, Towny residency checks, voting phase
@@ -191,6 +188,54 @@ checks, self-vote setting, vote-change setting, campaign limits, and party limit
 as the chat commands. Menu clicks and drags are cancelled inside plugin
 inventories so players cannot take, place, shift-click, or drag GUI items into
 their own inventory.
+
+### Election Night
+
+When an election concludes, TownyElections can present the tally as a staged
+**results broadcast** rather than printing the winner instantly. Only residents
+who are online at that moment see the show:
+
+1. a title card announces the election and its turnout,
+2. candidates are revealed one at a time from the bottom of the field up — each
+   step prints a party-coloured bar chart and updates a boss-bar scoreboard,
+3. for `RANKED_CHOICE` elections the *counting rounds* are replayed instead:
+   every round's tallies, the candidate(s) eliminated, and the exhausted ballots,
+4. the winner is crowned with a title, a server-wide announcement (optional),
+   sound cues, and fireworks above every viewer in the winner's party colours,
+5. a closing summary reports the final turnout and any ranks/mayor status the
+   winner received.
+
+The reveal is purely presentational: the result is recorded and the winner's
+rewards are granted before the first stage runs, so skipping or replaying a show
+can never change the outcome. With `defer-announcements: true` (the default) the
+usual instant "winner" broadcasts are withheld while the show is running, so
+nothing gives the result away early.
+
+```yaml
+election-night:
+  enabled: true
+  minimum-votes: 1            # smaller elections are announced normally
+  defer-announcements: true   # let the show narrate the result
+  reveal-order: "WORST_FIRST" # WORST_FIRST | BEST_FIRST | RANDOM
+  stage-delay-ticks: 40       # 20 ticks = 1 second
+  intro-delay-ticks: 60
+  winner-hold-ticks: 100
+  boss-bar: true
+  titles: true
+  sounds: true
+  fireworks: true
+  firework-count: 6
+  broadcast-server-wide: true
+```
+
+Command and GUI access:
+
+- `/election night` replays the last recorded result for your town (also
+  available as a firework button on the election desk).
+- `/election night skip [town]` (admin) fast-forwards a running show, which is
+  handy on a busy server or when testing.
+- Turning `election-night.enabled` off restores the classic instant
+  announcements.
 
 ### Political parties
 
@@ -210,7 +255,7 @@ registry so they survive the election ending.
 /election party rename Reform Unity   # admin: rename a party in this election
 ```
 
-When a resident leaves their town (or nation), their standing-party membership
+When a resident leaves their town, their standing-party membership
 is automatically cleared so no stale parties linger. Standing parties are
 persisted in `data.yml` under the `standing-parties` section and reload safely
 across restarts; old data files without that section load unchanged.
@@ -224,7 +269,7 @@ results.
 
 When a resident registers with `/election run`, the plugin also sends them a
 short list of recommended next steps (set a campaign message, join a party,
-colour it, and write a profile).
+and colour it).
 
 Candidate lists and final results show each candidate's party. Party standings
 show candidate counts, and show vote totals whenever live results are public or
@@ -319,12 +364,16 @@ console warning. Command placeholders: `{winner}`, `{winner_uuid}`, `{town}`,
 ## Configuration highlights
 
 Durations accept friendly strings like `30s`, `10m`, `2h`, `3d`, `1w`, or
-combinations such as `1w3d12h`. Candidates can set a short campaign message and a longer candidate profile/bio for voters to read. Candidates can join an existing party or create a new party label with `/election party <name>`; tab completion suggests current parties. Party standings are available with `/election parties`, and final results include party-level vote totals plus winner command placeholders.
+combinations such as `1w3d12h`. Candidates set a campaign message and can join an
+existing party or create a new party label with `/election party <name>`; tab
+completion suggests current parties. Party standings are available with
+`/election parties`, and final results include party-level vote totals plus
+winner command placeholders.
 
 By default (`campaign.lock-edits-during-voting: true`), candidates cannot change
-their campaign message, profile, party, or party colour once the voting phase has
-begun — these can only be edited during the nomination phase. Set it to `false`
-to allow edits at any time.
+their campaign message, party, or party colour once the voting phase has begun —
+these can only be edited during the nomination phase. Set it to `false` to allow
+edits at any time.
 
 ```yaml
 election:
@@ -334,12 +383,12 @@ election:
   max-candidates: 0            # 0 = unlimited
   auto-win-single-candidate: true
   allow-vote-changes: true
-  public-live-results: false   # false = secret ballot
+  public-live-results: true    # false = secret ballot
   voting-system: "PLURALITY"   # PLURALITY | RANKED_CHOICE | APPROVAL
-  tie-breaker: "INCUMBENT"     # RANDOM | EARLIEST | INCUMBENT | RUNOFF | NONE
+  tie-breaker: "RUNOFF"        # RANDOM | EARLIEST | INCUMBENT | RUNOFF | NONE
   auto-schedule:
-    enabled: false
-    interval: "30d"
+    enabled: true
+    interval: "14d"
   ip-vote-limit:
     enabled: false
     max-votes: 0                 # 0 = unlimited
@@ -376,10 +425,9 @@ If PlaceholderAPI is installed, these placeholders are available (identifier
 | `%townyelections_leading_party%`    | Leading current-election party.       |
 | `%townyelections_last_winner%`      | Name of the last winner in the town. |
 | `%townyelections_last_winner_party%`| Party of the last winner in the town. |
-
-Every placeholder also has a `nation_` variant (for example
-`%townyelections_nation_phase%` or `%townyelections_nation_last_winner%`) that
-resolves against the player's **nation** election instead of their town election.
+| `%townyelections_last_winner_votes%`| Votes received by the last winner.   |
+| `%townyelections_last_turnout%`     | Turnout of the last election, in percent. |
+| `%townyelections_night_running%`    | `true` while a night show is live.   |
 
 ---
 
@@ -395,7 +443,7 @@ Configure it under `update-checker` in `config.yml`:
 
 - `update-checker.enabled` — turn the GitHub Releases check on or off.
 - `update-checker.github-repository` — GitHub repository in `owner/name` form
-  (default: `vingaming1113/TownyElections`). Draft, prerelease, and nightly releases are ignored.
+  (default: `mnagingvi/TownyElections-2`). Draft, prerelease, and nightly releases are ignored.
 - `update-checker.notify-admins-on-join` — message admins on join when an update
   is available.
 
@@ -422,14 +470,20 @@ correctly across restarts.
 ## Contributing
 
 Bug reports, feature ideas, and pull requests are welcome. Please use the
-[issue tracker](https://github.com/vingaming1113/TownyElections/issues) and keep
-changes focused on the existing Paper/Towny workflow.
+[issue tracker](https://github.com/mnagingvi/TownyElections-2/issues) and keep
+changes focused on the existing Paper/Towny workflow. The
+[contributing guide](CONTRIBUTING.md) explains the layout of the source tree
+and the conventions the code follows, and everyone taking part is expected to
+follow the [code of conduct](CODE_OF_CONDUCT.md).
 
 Before submitting a code change, run:
 
 ```bash
 mvn clean package
 ```
+
+Please report anything that looks like a security problem privately through
+[SECURITY.md](SECURITY.md) rather than in a public issue.
 
 ---
 
