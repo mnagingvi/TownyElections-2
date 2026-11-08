@@ -22,6 +22,7 @@ Towny town ranks (plot management, etc.) and/or mayorship you configure.
 
 **Links:** [Releases](https://github.com/mnagingvi/TownyElections-2/releases)
 | [Issues](https://github.com/mnagingvi/TownyElections-2/issues)
+| [Changelog](CHANGELOG.md)
 | [bStats](https://bstats.org/plugin/bukkit/TownyElection/35211)
 | [Towny](https://github.com/TownyAdvanced/Towny)
 
