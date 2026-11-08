@@ -34,7 +34,6 @@ public class ConfigManager {
     private int maxCandidates;
     private boolean autoWinSingleCandidate;
     private int minTownResidents;
-    private int votesPerResident;
     private boolean allowVoteChanges;
     private boolean publicLiveResults;
     private boolean allowSelfVote;
@@ -43,8 +42,6 @@ public class ConfigManager {
     private long runoffDurationMs;
     private boolean autoScheduleEnabled;
     private long autoScheduleIntervalMs;
-    private double candidacyCost;
-    private double winnerReward;
     private boolean ipVoteLimitEnabled;
     private int ipVoteLimitMax;
 
@@ -108,7 +105,6 @@ public class ConfigManager {
         maxCandidates = Math.max(0, c.getInt("election.max-candidates", 0));
         autoWinSingleCandidate = c.getBoolean("election.auto-win-single-candidate", true);
         minTownResidents = Math.max(1, c.getInt("election.min-town-residents", 2));
-        votesPerResident = Math.max(1, c.getInt("election.votes-per-resident", 1));
         allowVoteChanges = c.getBoolean("election.allow-vote-changes", true);
         publicLiveResults = c.getBoolean("election.public-live-results", false);
         allowSelfVote = c.getBoolean("election.allow-self-vote", true);
@@ -117,8 +113,6 @@ public class ConfigManager {
         runoffDurationMs = DurationUtil.parseMillis(c.getString("election.runoff-duration"), days(1));
         autoScheduleEnabled = c.getBoolean("election.auto-schedule.enabled", false);
         autoScheduleIntervalMs = DurationUtil.parseMillis(c.getString("election.auto-schedule.interval"), days(30));
-        candidacyCost = c.getDouble("election.economy.candidacy-cost", 0.0);
-        winnerReward = c.getDouble("election.economy.winner-reward", 0.0);
         ipVoteLimitEnabled = c.getBoolean("election.ip-vote-limit.enabled", false);
         ipVoteLimitMax = Math.max(0, c.getInt("election.ip-vote-limit.max-votes", 0));
 
@@ -181,7 +175,6 @@ public class ConfigManager {
     public int getMaxCandidates() { return maxCandidates; }
     public boolean isAutoWinSingleCandidate() { return autoWinSingleCandidate; }
     public int getMinTownResidents() { return minTownResidents; }
-    public int getVotesPerResident() { return votesPerResident; }
     public boolean isAllowVoteChanges() { return allowVoteChanges; }
     public boolean isPublicLiveResults() { return publicLiveResults; }
     public boolean isAllowSelfVote() { return allowSelfVote; }
@@ -190,8 +183,6 @@ public class ConfigManager {
     public long getRunoffDurationMs() { return runoffDurationMs; }
     public boolean isAutoScheduleEnabled() { return autoScheduleEnabled; }
     public long getAutoScheduleIntervalMs() { return autoScheduleIntervalMs; }
-    public double getCandidacyCost() { return candidacyCost; }
-    public double getWinnerReward() { return winnerReward; }
     public boolean isIpVoteLimitEnabled() { return ipVoteLimitEnabled; }
     public int getIpVoteLimitMax() { return ipVoteLimitMax; }
 
