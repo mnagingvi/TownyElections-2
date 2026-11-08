@@ -43,6 +43,26 @@ semantic versioning. Older releases are listed on the
 - `config-version` bumped to **2**.
 - README defaults refreshed so the documented values match the shipped config.
 
+### Fixed
+
+- `plugin.yml` declared `townyelections.player` one indentation level too deep,
+  which turned it into a stray key inside the `townyelections.*` permission
+  instead of a permission of its own.
+
+### Tooling
+
+- Unit tests for the parts that are pure Java: the instant-runoff counter,
+  ballot handling and tallies, duration parsing and colour codes. They run as
+  part of `mvn package`, and CI uploads the Surefire reports.
+- CodeQL (security-and-quality queries) on pushes and pull requests to `main`,
+  plus weekly. Dependabot keeps Maven and action versions fresh; Paper and Towny
+  are bumped by hand.
+- Workflows moved to `checkout@v7`, `setup-java@v6`, `upload-artifact@v7` and
+  `action-gh-release@v3`, pinned to `ubuntu-24.04`, with superseded runs
+  cancelled and Maven errors surfaced as annotations.
+- `SECURITY.md`, `CODE_OF_CONDUCT.md`, a pull request template, and repo
+  description/topic notes in `.github/REPO_METADATA.md`.
+
 ### Removed
 
 - `election.votes-per-resident` and the whole `election.economy` block
