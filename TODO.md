@@ -31,4 +31,4 @@ These are not guaranteed to be added, these are just ideas which you can use if 
       message files, command parsing and the Towny hand-off on conclusion.
 
 - [ ] discussion / feature-request triage - a stale-issue workflow would close
-      bug reports that never got a `/election version` reply after a few weeks.
+      bug reports that never got a plugin/version reply after a few weeks.
