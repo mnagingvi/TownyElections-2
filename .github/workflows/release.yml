@@ -25,6 +25,16 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean package --file pom.xml
 
+      - name: Check the tag matches the pom version
+        run: |
+          pom_version="$(mvn -B -q help:evaluate -Dexpression=project.version -DforceStdout)"
+          tag_version="${GITHUB_REF_NAME#v}"
+          echo "tag: $tag_version, pom: $pom_version"
+          if [ "$pom_version" != "$tag_version" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match <version>${pom_version}</version> in pom.xml"
+            exit 1
+          fi
+
       - name: Publish release
         uses: softprops/action-gh-release@v3
         with:
