@@ -115,7 +115,8 @@ the difference between a green PR and a round trip:
 | **Labeler** | PR opened or updated | labels the PR by the paths it touches (`counting`, `translations`, `election-night`, ...) |
 | **Welcome** | first issue or PR by a new contributor | a comment with what a good report or PR needs here |
 | **Stale** | daily | marks quiet issues and PRs stale after 45/30 days, closes them 14/10 days later, and skips anything labelled `security` |
-| **Release** | `v*` tag | refuses to publish when the tag disagrees with the `<version>` in `pom.xml`, otherwise builds the jar and attaches it to the release |
+| **Release** | `v*` tag | refuses to publish when the tag disagrees with the `<version>` in `pom.xml`, otherwise builds the jar, writes the release notes through OpenRouter and attaches both to the release |
+| **Release notes preview** | manual | writes the same notes without publishing anything, so the wording can be checked first - see [RELEASING.md](RELEASING.md) |
 
 Run the lint check locally before pushing:
 
