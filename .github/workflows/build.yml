@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: build-${{ github.ref }}
@@ -42,6 +43,19 @@ jobs:
               echo "::error::${line:0:400}"
             done
           fi
+
+      - name: Write the build report
+        if: always()
+        run: |
+          python3 scripts/build_summary.py --out build-report.md
+          cat build-report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment the build report on the pull request
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: build-report
+          path: build-report.md
 
       - name: Upload jar artifact
         uses: actions/upload-artifact@v7
