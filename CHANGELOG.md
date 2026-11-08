@@ -60,6 +60,15 @@ semantic versioning. Older releases are listed on the
 - Workflows moved to `checkout@v7`, `setup-java@v6`, `upload-artifact@v7` and
   `action-gh-release@v3`, pinned to `ubuntu-24.04`, with superseded runs
   cancelled and Maven errors surfaced as annotations.
+- A build report on every run and pull request: version, jar size and a
+  per-class test table, written to the job summary and posted once per PR.
+- A `Lint` workflow: `scripts/check_messages.py` checks every locale against
+  `messages_en.yml` (keys and `{placeholders}`), that message keys used from
+  Java exist, and that `config.yml`/`plugin.yml` are sane; actionlint checks
+  the workflows themselves.
+- A managed label set (`.github/labels.yml` + sync workflow) and path-based
+  PR labelling, a welcome comment for first-time contributors, and a stale bot
+  for quiet issues and PRs.
 - `SECURITY.md`, `CODE_OF_CONDUCT.md`, a pull request template, and repo
   description/topic notes in `.github/REPO_METADATA.md`.
 
