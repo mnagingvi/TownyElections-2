@@ -1,12 +1,12 @@
 
 ![ownyElections](https://capsule-render.vercel.app/api?type=blur&height=300&color=gradient&section=header&reversal=false&text=TownyElections&textBg=false&fontSize=70&fontAlign=50&fontAlignY=50&rotate=0&strokeWidth=0&desc=Add+Actual+Elections+To+Your+Minecraft+Server.&descSize=20&descAlign=50&descAlignY=70)
 
-[![Build](https://github.com/vingaming1113/TownyElections/actions/workflows/build.yml/badge.svg)](https://github.com/vingaming1113/TownyElections/actions/workflows/build.yml)
-[![Latest release](https://img.shields.io/github/v/release/vingaming1113/TownyElections?label=release&logo=github)](https://github.com/vingaming1113/TownyElections/releases)
-[![Downloads](https://img.shields.io/github/downloads/vingaming1113/TownyElections/total?label=downloads&logo=github)](https://github.com/vingaming1113/TownyElections/releases)
-[![Contributors](https://img.shields.io/github/contributors/vingaming1113/TownyElections?label=contributors&logo=github)](https://github.com/vingaming1113/TownyElections/graphs/contributors)
-[![Last commit](https://img.shields.io/github/last-commit/vingaming1113/TownyElections?logo=git)](https://github.com/vingaming1113/TownyElections/commits/main)
-[![Issues](https://img.shields.io/github/issues/vingaming1113/TownyElections?logo=github)](https://github.com/vingaming1113/TownyElections/issues)
+[![Build](https://github.com/mnagingvi/TownyElections-2/actions/workflows/build.yml/badge.svg)](https://github.com/mnagingvi/TownyElections-2/actions/workflows/build.yml)
+[![Latest release](https://img.shields.io/github/v/release/mnagingvi/TownyElections-2?label=release&logo=github)](https://github.com/mnagingvi/TownyElections-2/releases)
+[![Downloads](https://img.shields.io/github/downloads/mnagingvi/TownyElections-2/total?label=downloads&logo=github)](https://github.com/mnagingvi/TownyElections-2/releases)
+[![Contributors](https://img.shields.io/github/contributors/mnagingvi/TownyElections-2?label=contributors&logo=github)](https://github.com/mnagingvi/TownyElections-2/graphs/contributors)
+[![Last commit](https://img.shields.io/github/last-commit/mnagingvi/TownyElections-2?logo=git)](https://github.com/mnagingvi/TownyElections-2/commits/main)
+[![Issues](https://img.shields.io/github/issues/mnagingvi/TownyElections-2?logo=github)](https://github.com/mnagingvi/TownyElections-2/issues)
 [![bStats servers](https://img.shields.io/bstats/servers/35211?label=servers&logo=googleanalytics&logoColor=white)](https://bstats.org/plugin/bukkit/TownyElection/35211)
 [![Java 21](https://img.shields.io/badge/Java-21-f89820?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![Paper 1.21.4+](https://img.shields.io/badge/Paper-1.21.4%2B-34d399)](https://papermc.io/)
@@ -20,8 +20,8 @@ Residents run for office, publish a campaign message, and their fellow townsfolk
 vote. When the election concludes, the winner is automatically granted the
 Towny town ranks (plot management, etc.) and/or mayorship you configure.
 
-**Links:** [Releases](https://github.com/vingaming1113/TownyElections/releases)
-| [Issues](https://github.com/vingaming1113/TownyElections/issues)
+**Links:** [Releases](https://github.com/mnagingvi/TownyElections-2/releases)
+| [Issues](https://github.com/mnagingvi/TownyElections-2/issues)
 | [bStats](https://bstats.org/plugin/bukkit/TownyElection/35211)
 | [Towny](https://github.com/TownyAdvanced/Towny)
 
@@ -72,8 +72,8 @@ Towny town ranks (plot management, etc.) and/or mayorship you configure.
 These images update automatically from GitHub and bStats.
 
 <p align="center">
-  <a href="https://github.com/vingaming1113/TownyElections/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=vingaming1113/TownyElections&max=1000" alt="TownyElections contributors" />
+  <a href="https://github.com/mnagingvi/TownyElections-2/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=mnagingvi/TownyElections-2&max=1000" alt="TownyElections contributors" />
   </a>
 </p>
 
@@ -95,7 +95,7 @@ These images update automatically from GitHub and bStats.
 ## Installation
 
 1. Download the latest jar from the
-   [releases page](https://github.com/vingaming1113/TownyElections/releases).
+   [releases page](https://github.com/mnagingvi/TownyElections-2/releases).
 2. Place it in the server `plugins/` folder.
 3. Make sure [Towny](https://github.com/TownyAdvanced/Towny) is installed.
 4. Restart the server, then edit `plugins/TownyElections/config.yml`.
@@ -453,7 +453,7 @@ Configure it under `update-checker` in `config.yml`:
 
 - `update-checker.enabled` — turn the GitHub Releases check on or off.
 - `update-checker.github-repository` — GitHub repository in `owner/name` form
-  (default: `vingaming1113/TownyElections`). Draft, prerelease, and nightly releases are ignored.
+  (default: `mnagingvi/TownyElections-2`). Draft, prerelease, and nightly releases are ignored.
 - `update-checker.notify-admins-on-join` — message admins on join when an update
   is available.
 
@@ -480,7 +480,7 @@ correctly across restarts.
 ## Contributing
 
 Bug reports, feature ideas, and pull requests are welcome. Please use the
-[issue tracker](https://github.com/vingaming1113/TownyElections/issues) and keep
+[issue tracker](https://github.com/mnagingvi/TownyElections-2/issues) and keep
 changes focused on the existing Paper/Towny workflow.
 
 Before submitting a code change, run:

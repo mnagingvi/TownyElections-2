@@ -28,7 +28,7 @@ update-checker:
   # Master switch for the GitHub Releases update check.
   enabled: true
   # GitHub repository in owner/name form.
-  github-repository: "vingaming1113/TownyElections"
+  github-repository: "mnagingvi/TownyElections-2"
   # Notify players with townyelections.admin when they join if an update exists.
   notify-admins-on-join: true
 

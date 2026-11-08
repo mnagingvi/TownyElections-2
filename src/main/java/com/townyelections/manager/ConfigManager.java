@@ -99,7 +99,7 @@ public class ConfigManager {
         metrics = c.getBoolean("general.metrics", true);
 
         updateCheckerEnabled = c.getBoolean("update-checker.enabled", true);
-        updateRepository = c.getString("update-checker.github-repository", "vingaming1113/TownyElections");
+        updateRepository = c.getString("update-checker.github-repository", "mnagingvi/TownyElections-2");
         updateNotifyAdminsOnJoin = c.getBoolean("update-checker.notify-admins-on-join", true);
 
         nominationDurationMs = DurationUtil.parseMillis(c.getString("election.nomination-duration"), days(2));
