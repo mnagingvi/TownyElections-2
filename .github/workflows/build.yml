@@ -9,29 +9,54 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B clean package --file pom.xml
+        run: |
+          set -o pipefail
+          mvn -B clean package --file pom.xml 2>&1 | tee build.log
+
+      - name: Surface build errors
+        if: failure()
+        run: |
+          if [ -f build.log ]; then
+            grep -E "^\[ERROR\]|error:|cannot find symbol|Tests run:.*Failures" build.log | tail -30 | while IFS= read -r line; do
+              echo "::error::${line:0:400}"
+            done
+          fi
 
       - name: Upload jar artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: TownyElections
           path: target/TownyElections-*.jar
           if-no-files-found: error
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/
+          if-no-files-found: ignore
 
       - name: Publish rolling nightly release
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
