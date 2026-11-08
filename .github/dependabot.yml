@@ -1,0 +1,35 @@
+# Weekly Maven updates, monthly action updates. Minor and patch bumps arrive as
+# one grouped PR so CI runs once instead of once per library.
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    groups:
+      maven-minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # Paper and Towny are the two dependencies whose version decides whether
+      # the plugin compiles at all, so bump them by hand together with the code
+      # changes they need instead of in a bot PR.
+      - dependency-name: "io.papermc.paper:paper-api"
+      - dependency-name: "com.github.TownyAdvanced.Towny:towny"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "ci"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

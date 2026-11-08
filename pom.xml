@@ -79,7 +79,8 @@
         </dependency>
 
         <!-- Gson: bundled with the Minecraft server / Paper at runtime, so this
-             is provided (not shaded). Used to parse the Modrinth update API. -->
+             is provided (not shaded). Used to parse the GitHub releases API in
+             the update checker. -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
