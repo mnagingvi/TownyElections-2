@@ -136,7 +136,9 @@ public final class ElectionNight {
                 rewards == null ? RewardSummary.NONE : rewards, announceRewards);
         shows.put(constituency.getUuid(), show);
         show.begin();
-        return true;
+        // begin() can finish immediately if the last viewer vanished on the same
+        // tick; report the real state so the caller keeps its announcements.
+        return isRunning(constituency.getUuid());
     }
 
     /** Replays an already recorded result as a show (no rewards are re-announced). */
