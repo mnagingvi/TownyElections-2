@@ -158,6 +158,9 @@ public class ElectionMenu implements Listener {
         }
 
         Election election = elections.getElection(ctx.town());
+        if (election == null) {
+            return;
+        }
         List<Candidate> candidates = sortedCandidates(election);
         int maxPage = Math.max(0, (candidates.size() - 1) / CONTENT_SLOTS.size());
         int page = Math.max(0, Math.min(requestedPage, maxPage));
