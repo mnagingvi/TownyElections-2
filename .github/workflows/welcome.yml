@@ -20,8 +20,8 @@ jobs:
       - name: Post a welcome comment
         uses: actions/first-interaction@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-message: |
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: |
             👋 Thanks for opening your first issue here, and welcome!
 
             To get this looked at quickly, please make sure the report includes:
@@ -36,7 +36,7 @@ jobs:
             is the better place. Security problems should go through
             [SECURITY.md](https://github.com/mnagingvi/TownyElections-2/blob/main/SECURITY.md)
             instead of a public issue.
-          pr-message: |
+          pr_message: |
             👋 Thanks for your first pull request here, and welcome!
 
             A few things that make review easy:
