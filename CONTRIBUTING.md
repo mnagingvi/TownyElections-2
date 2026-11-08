@@ -101,3 +101,34 @@ git push origin docs/add-danish-translation
 2. Click **Pull requests** > **New pull request**.
 3. Select your fork and topic branch in the comparison dropdown.
 4. Fill out the PR title and description explaining what was changed, then submit.
+
+## What runs automatically
+
+You do not have to run any of this yourself, but knowing what CI checks makes
+the difference between a green PR and a round trip:
+
+| Workflow | Trigger | What it checks |
+| --- | --- | --- |
+| **Build** | every push and PR | `mvn package`, i.e. compile + the unit tests, then uploads the jar and posts the build report as a comment on the PR |
+| **Lint** | every push and PR | `scripts/check_messages.py` (locale parity, `{placeholders}`, message keys used from Java, `config.yml`/`plugin.yml` sanity) and actionlint over `.github/workflows` |
+| **CodeQL** | PRs and pushes to `main`, weekly | security-and-quality analysis of the Java sources |
+| **Labeler** | PR opened or updated | labels the PR by the paths it touches (`counting`, `translations`, `election-night`, ...) |
+| **Welcome** | first issue or PR by a new contributor | a comment with what a good report or PR needs here |
+| **Stale** | daily | marks quiet issues and PRs stale after 45/30 days, closes them 14/10 days later, and skips anything labelled `security` |
+| **Release** | `v*` tag | refuses to publish when the tag disagrees with the `<version>` in `pom.xml`, otherwise builds the jar and attaches it to the release |
+
+Run the lint check locally before pushing:
+
+```bash
+python scripts/check_messages.py          # needs PyYAML
+python scripts/build_summary.py           # preview the CI build report
+```
+
+Two of these only work once they are on `main`, because GitHub reads
+`issues`, `pull_request_target` and scheduled workflows from the default
+branch: **Labeler**, **Welcome** and **Stale**. Everything else runs from the
+branch you are on.
+
+Labels live in `.github/labels.yml` and are synced by the **Labels** workflow;
+add a new label there rather than in the GitHub UI so the next sync does not
+fight you.
